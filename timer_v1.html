@@ -111,44 +111,16 @@
             display: block;
         }
 
-        /* 이미지 화면 - 전체 페이지 핀치 줌 */
-        #image-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .image-container img {
             width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 100;
-            overflow: hidden;
-            touch-action: none;
-        }
-
-        #image-screen.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #strategy-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transform-origin: center center;
-            transition: transform 0.1s ease-out;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
         .zoom-hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
+            color: #999;
             font-size: 14px;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 20px;
-            border-radius: 20px;
-            z-index: 101;
+            margin-bottom: 15px;
         }
 
         .timer-display {
@@ -283,6 +255,15 @@
             </button>
         </div>
 
+        <!-- 이미지 화면 -->
+        <div id="image-screen" class="screen">
+            <h1>단계별 전략 수립</h1>
+            <p class="zoom-hint">🔍 두 손가락으로 페이지 전체를 확대/축소할 수 있어요</p>
+            <div class="image-container">
+                <img src="단계별 전략_v2.png" alt="단계별 전략">
+            </div>
+        </div>
+
         <!-- 타이머 화면 -->
         <div id="timer-screen" class="screen">
             <h1>⏱️ 100분 타이머</h1>
@@ -312,12 +293,6 @@
         </div>
     </div>
 
-    <!-- 이미지 화면 (전체 페이지) -->
-    <div id="image-screen" class="screen">
-        <img src="단계별 전략_v2.png" alt="단계별 전략" id="strategy-image">
-        <div class="zoom-hint">🔍 두 손가락으로 확대/축소 • 핸드폰 뒤로가기로 돌아가기</div>
-    </div>
-
     <script>
         // 타이머 관련 변수
         const maxTime = 100 * 60;
@@ -335,33 +310,10 @@
         // 현재 화면 상태
         let currentScreen = 'main';
 
-        // 이미지 핀치 줌 관련 변수
-        let scale = 1;
-        let posX = 0;
-        let posY = 0;
-        let lastScale = 1;
-        let startDistance = 0;
-        let startX = 0;
-        let startY = 0;
-        let isDragging = false;
-
         function showScreen(screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screen + '-screen').classList.add('active');
-            
-            // 메인/타이머 화면일 때 컨테이너 보이기
-            if (screen === 'main' || screen === 'timer') {
-                document.querySelector('.container').style.display = 'block';
-            } else {
-                document.querySelector('.container').style.display = 'none';
-            }
-            
             currentScreen = screen;
-            
-            // 이미지 화면으로 이동 시 줌 초기화
-            if (screen === 'image') {
-                resetImageZoom();
-            }
             
             if (screen !== 'main') {
                 history.pushState({ screen: screen }, '', '');
@@ -491,14 +443,11 @@
         function goBackToMain() {
             if (currentScreen === 'timer') {
                 resetTimer();
-            } else if (currentScreen === 'image') {
-                resetImageZoom();
             }
             
             currentScreen = 'main';
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('main-screen').classList.add('active');
-            document.querySelector('.container').style.display = 'block';
         }
 
         // 페이지 복귀 시 시간 업데이트
@@ -516,105 +465,6 @@
 
         window.addEventListener('focus', handlePageResume);
         window.addEventListener('pageshow', handlePageResume);
-        
-        document.addEventListener('touchstart', function() {
-            if (isRunning) {
-                updateDisplay();
-            }
-        }, { passive: true });
-
-        // ===== 이미지 핀치 줌 기능 =====
-        const imageScreen = document.getElementById('image-screen');
-        const strategyImage = document.getElementById('strategy-image');
-
-        function updateImageTransform() {
-            strategyImage.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-        }
-
-        function resetImageZoom() {
-            scale = 1;
-            posX = 0;
-            posY = 0;
-            lastScale = 1;
-            updateImageTransform();
-        }
-
-        function getDistance(touches) {
-            const dx = touches[0].clientX - touches[1].clientX;
-            const dy = touches[0].clientY - touches[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        // 터치 시작
-        imageScreen.addEventListener('touchstart', function(e) {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                startDistance = getDistance(e.touches);
-                lastScale = scale;
-            } else if (e.touches.length === 1) {
-                startX = e.touches[0].clientX - posX;
-                startY = e.touches[0].clientY - posY;
-                isDragging = true;
-            }
-        }, { passive: false });
-
-        // 터치 이동
-        imageScreen.addEventListener('touchmove', function(e) {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const currentDistance = getDistance(e.touches);
-                scale = Math.min(Math.max(lastScale * (currentDistance / startDistance), 1), 5);
-                updateImageTransform();
-            } else if (e.touches.length === 1 && isDragging && scale > 1) {
-                e.preventDefault();
-                posX = e.touches[0].clientX - startX;
-                posY = e.touches[0].clientY - startY;
-                updateImageTransform();
-            }
-        }, { passive: false });
-
-        // 터치 종료
-        imageScreen.addEventListener('touchend', function(e) {
-            isDragging = false;
-            lastScale = scale;
-            
-            if (scale <= 1) {
-                scale = 1;
-                posX = 0;
-                posY = 0;
-                updateImageTransform();
-            }
-        });
-
-        // 더블탭으로 확대/축소
-        let lastTap = 0;
-        imageScreen.addEventListener('touchend', function(e) {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-                if (scale > 1) {
-                    scale = 1;
-                    posX = 0;
-                    posY = 0;
-                } else {
-                    scale = 2.5;
-                }
-                updateImageTransform();
-                lastScale = scale;
-            }
-            lastTap = currentTime;
-        });
-
-        // PC에서 마우스 휠로 확대/축소
-        imageScreen.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            scale = Math.min(Math.max(scale * delta, 1), 5);
-            updateImageTransform();
-            lastScale = scale;
-        }, { passive: false });
 
         // 브라우저/핸드폰 뒤로가기 버튼 지원
         window.addEventListener('popstate', function(e) {
