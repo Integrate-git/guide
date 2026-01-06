@@ -448,40 +448,43 @@
             }
         }
 
+        // 타임스탬프 관련 변수
+        const maxRecords = 4;
+        let timestamps = [];
+        const recordLabels = ['1회독 단계', '2회독 단계', '검토/마무리', '풀이 종료'];
+        
         function recordTimestamp() {
             if (timestamps.length >= maxRecords) {
-                alert('최대 기록 횟수(3회)를 초과했습니다.');
+                alert('모든 단계가 기록되었습니다.');
                 return;
             }
-
             if (!isRunning && timeElapsed === 0) {
                 alert('타이머를 먼저 시작해주세요.');
                 return;
             }
-
             timestamps.push(timeElapsed);
             updateTimestampDisplay();
         }
-
+        
         function updateTimestampDisplay() {
             const listElement = document.getElementById('timestamp-list');
             const countElement = document.getElementById('record-count');
             const recordBtn = document.getElementById('record-btn');
-
+            
             if (timestamps.length === 0) {
                 listElement.innerHTML = '<div class="timestamp-item empty">기록 없음</div>';
             } else {
                 listElement.innerHTML = timestamps.map((time, index) => `
                     <div class="timestamp-item">
-                        <span class="timestamp-number">#${index + 1}</span>
+                        <span class="timestamp-number">${recordLabels[index]}</span>
                         <span class="timestamp-time">${formatTime(time)}</span>
                     </div>
                 `).join('');
             }
-
+            
             const remaining = maxRecords - timestamps.length;
             countElement.textContent = `남은 기록 횟수: ${remaining}회`;
-
+            
             if (remaining === 0) {
                 recordBtn.disabled = true;
             } else {
