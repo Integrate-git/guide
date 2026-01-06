@@ -72,12 +72,6 @@
             color: white;
         }
 
-        .btn-back {
-            background: #6c757d;
-            color: white;
-            margin-top: 20px;
-        }
-
         .btn-start {
             background: #28a745;
             color: white;
@@ -121,85 +115,12 @@
             width: 100%;
             border-radius: 12px;
             margin-bottom: 15px;
-            cursor: pointer;
-        }
-
-        .image-caption {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 10px;
         }
 
         .zoom-hint {
             color: #999;
             font-size: 14px;
             margin-bottom: 15px;
-        }
-
-        /* 전체화면 이미지 뷰어 */
-        .fullscreen-viewer {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            overflow: hidden;
-            touch-action: none;
-        }
-
-        .fullscreen-viewer.active {
-            display: block;
-        }
-
-        .fullscreen-image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .fullscreen-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transform-origin: center center;
-            transition: transform 0.1s ease-out;
-        }
-
-        .close-btn {
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            font-size: 36px;
-            color: white;
-            cursor: pointer;
-            z-index: 1001;
-            background: rgba(0,0,0,0.5);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-        }
-
-        .viewer-hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 14px;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 20px;
-            border-radius: 20px;
-            z-index: 1001;
         }
 
         .timer-display {
@@ -318,7 +239,122 @@
                 flex: 1 1 45%;
             }
         }
-    </style>
+    
+
+        /* ===== 메인 화면 하단 홍보/링크 영역 ===== */
+        .it-footer {
+            margin-top: 22px;
+            padding: 18px 16px;
+            border-top: 1px solid rgba(0,0,0,.08);
+            background: #fff;
+            border-radius: 14px;
+        }
+        .it-footer__inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: grid;
+            gap: 12px;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .it-footer__cta {
+            width: min(360px, 100%);
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 0;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transition: transform .12s ease, box-shadow .12s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .it-footer__cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0,0,0,.12);
+        }
+        .it-footer__cta:active { transform: translateY(0); }
+
+        .it-footer__sns { display: flex; gap: 10px; align-items: center; }
+
+        .it-sns {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,.12);
+            text-decoration: none;
+            transition: transform .12s ease, box-shadow .12s ease;
+            background: #fff;
+        }
+        .it-sns:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        }
+        .it-sns svg {
+            width: 20px;
+            height: 20px;
+            fill: #111;
+        }
+
+        .it-footer__copyright {
+            margin: 0;
+            font-size: 12.5px;
+            color: rgba(0,0,0,.65);
+        }
+
+        .it-footer__details {
+            width: min(720px, 100%);
+            border: 1px solid rgba(0,0,0,.10);
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: #fff;
+        }
+        .it-footer__summary {
+            cursor: pointer;
+            list-style: none;
+            font-size: 13px;
+            color: rgba(0,0,0,.78);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .it-footer__summary::-webkit-details-marker { display: none; }
+
+        .it-footer__chev { transition: transform .15s ease; }
+        details[open] .it-footer__chev { transform: rotate(180deg); }
+
+        .it-footer__panel { padding-top: 10px; }
+        .it-footer__dl { margin: 0; display: grid; gap: 8px; text-align: left; }
+        .it-footer__row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+        .it-footer__row dt { font-weight: 600; color: rgba(0,0,0,.75); }
+        .it-footer__row dd { margin: 0; color: rgba(0,0,0,.70); }
+        .it-footer__row a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+        @media (max-width: 480px) {
+            .it-footer__row { grid-template-columns: 1fr; }
+            .it-footer__dl { text-align: left; }
+        }
+
+        /* ===== 타이머 화면에서만 핀치줌 방지(지원 브라우저) ===== */
+        body.timer-no-zoom {
+            touch-action: pan-y;
+        }
+</style>
 </head>
 <body>
     <div class="container">
@@ -332,17 +368,105 @@
                 <span class="emoji">⏱️</span>
                 100분 타이머
             </button>
+
+            <!-- ✅ 메인 화면 하단: 회사/SNS/교재 링크 (메인 화면에서만 표시) -->
+            <footer class="it-footer" role="contentinfo">
+              <div class="it-footer__inner">
+
+                <!-- 교재 판매 페이지 버튼 (원하는 링크로 교체하세요) -->
+                <a
+                  class="it-footer__cta"
+                  href="https://example.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="교재 판매 페이지로 이동"
+                >
+                  📚 교재 구매하러 가기
+                </a>
+
+                <!-- 1) 인스타그램 / 2) 네이버 카페 아이콘 -->
+                <nav class="it-footer__sns" aria-label="SNS 링크">
+                  <a
+                    class="it-sns"
+                    href="https://www.instagram.com/lhw_math/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="인스타그램으로 이동"
+                    title="Instagram"
+                  >
+                    <!-- Instagram SVG (simple) -->
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path
+                        d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9A3.5 3.5 0 0 0 20 16.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.6-2.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"
+                      />
+                    </svg>
+                  </a>
+
+                  <a
+                    class="it-sns"
+                    href="https://cafe.naver.com/pnmath"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="네이버 카페로 이동"
+                    title="Naver Cafe"
+                  >
+                    <!-- Naver Cafe: simple 'N' badge SVG -->
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path
+                        d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm1.8 15.6V5.4h2.2l4.1 7.1V5.4h2.1v13.2h-2.2l-4.1-7.1v7.1H7.8Z"
+                      />
+                    </svg>
+                  </a>
+                </nav>
+
+                <!-- 3) Copyright 문구 -->
+                <p class="it-footer__copyright">
+                  Copyright © 2025 ㈜ 인터그레이트 All rights reserved.
+                </p>
+
+                <!-- 4) 드롭다운 사업자 정보 (HTML details/summary) -->
+                <details class="it-footer__details">
+                  <summary class="it-footer__summary">
+                    (주) 인터그레이트 사업자 정보
+                    <span class="it-footer__chev" aria-hidden="true">▾</span>
+                  </summary>
+
+                  <div class="it-footer__panel" role="group" aria-label="사업자 정보">
+                    <dl class="it-footer__dl">
+                      <div class="it-footer__row">
+                        <dt>주소</dt>
+                        <dd>서울특별시 강남구 선릉로 608 (삼성동, 선진빌딩 6층)</dd>
+                      </div>
+                      <div class="it-footer__row">
+                        <dt>법인</dt>
+                        <dd>㈜ 인터그레이트</dd>
+                      </div>
+                      <div class="it-footer__row">
+                        <dt>대표이사</dt>
+                        <dd>이해원</dd>
+                      </div>
+                      <div class="it-footer__row">
+                        <dt>사업자등록번호</dt>
+                        <dd>401-87-02099</dd>
+                      </div>
+                      <div class="it-footer__row">
+                        <dt>이메일</dt>
+                        <dd><a href="mailto:info@integrate.kr">info@integrate.kr</a></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </details>
+              </div>
+            </footer>
         </div>
 
         <!-- 이미지 화면 -->
         <div id="image-screen" class="screen">
             <h1>단계별 전략 수립</h1>
+            <p class="zoom-hint">🔍 두 손가락으로 페이지 전체를 확대/축소할 수 있어요</p>
             <div class="image-container">
-                <img src="단계별 전략.png" alt="단계별 전략" onclick="openViewer()">
+                <img src="단계별 전략_v2.png" alt="단계별 전략">
             </div>
-            <button class="btn btn-back" onclick="goBackFromImage()">
-                ← 뒤로 가기
-            </button>
         </div>
 
         <!-- 타이머 화면 -->
@@ -371,28 +495,17 @@
                 </div>
                 <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
             </div>
-
-            <button class="btn btn-back" onclick="goBackFromTimer()">
-                ← 뒤로 가기
-            </button>
         </div>
-    </div>
-
-    <!-- 전체화면 이미지 뷰어 -->
-    <div id="fullscreen-viewer" class="fullscreen-viewer">
-        <button class="close-btn" onclick="closeViewer()">✕</button>
-        <div class="fullscreen-image-container">
-            <img id="fullscreen-image" class="fullscreen-image" src="" alt="확대 이미지">
-        </div>
-        <div class="viewer-hint">두 손가락으로 확대/축소 • 드래그로 이동</div>
     </div>
 
     <script>
         // 타이머 관련 변수
-        let timeElapsed = 0;
         const maxTime = 100 * 60;
         let timerInterval = null;
         let isRunning = false;
+        let startTime = null;
+        let pausedElapsed = 0;
+        let timerEnded = false;
 
         // 타임스탬프 관련 변수
         const maxRecords = 4;
@@ -402,22 +515,41 @@
         // 현재 화면 상태
         let currentScreen = 'main';
 
-        // 핀치 줌 관련 변수
-        let scale = 1;
-        let posX = 0;
-        let posY = 0;
-        let lastScale = 1;
-        let startDistance = 0;
-        let startX = 0;
-        let startY = 0;
-        let isDragging = false;
+        // ===== 핀치줌(확대/축소) 제어 =====
+        // '단계별 전략 수립' 화면: 허용
+        // '100분 타이머' 화면: 차단
+        function shouldBlockPinchZoom() {
+            return currentScreen === 'timer';
+        }
+
+        // iOS Safari 계열(gesture 이벤트) 대응
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(evtName => {
+            document.addEventListener(evtName, function(e) {
+                if (shouldBlockPinchZoom()) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+
+        // 크롬/안드로이드 계열(멀티터치) 대응
+        function blockMultiTouch(e) {
+            if (!shouldBlockPinchZoom()) return;
+            if (e.touches && e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }
+        document.addEventListener('touchstart', blockMultiTouch, { passive: false });
+        document.addEventListener('touchmove', blockMultiTouch, { passive: false });
+
 
         function showScreen(screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screen + '-screen').classList.add('active');
             currentScreen = screen;
-            
-            // 히스토리에 상태 추가 (뒤로가기 지원)
+
+            // ✅ 타이머 화면에서는 핀치줌(확대/축소) 동작을 막기 위한 플래그 클래스
+            document.body.classList.toggle('timer-no-zoom', screen === 'timer');
+
             if (screen !== 'main') {
                 history.pushState({ screen: screen }, '', '');
             }
@@ -429,8 +561,31 @@
             return mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
         }
 
+        function getElapsedTime() {
+            if (!isRunning || !startTime) {
+                return pausedElapsed;
+            }
+            const now = Date.now();
+            const elapsed = pausedElapsed + Math.floor((now - startTime) / 1000);
+            return Math.min(elapsed, maxTime);
+        }
+
         function updateDisplay() {
-            document.getElementById('timer-display').textContent = formatTime(timeElapsed);
+            const elapsed = getElapsedTime();
+            document.getElementById('timer-display').textContent = formatTime(elapsed);
+            
+            if (elapsed >= maxTime && isRunning && !timerEnded) {
+                timerEnded = true;
+                clearInterval(timerInterval);
+                pausedElapsed = maxTime;
+                isRunning = false;
+                
+                const btn = document.getElementById('start-btn');
+                btn.textContent = '▶ 시작';
+                btn.className = 'btn btn-start';
+                
+                alert('🔔 시험시간이 종료되었습니다.');
+            }
         }
 
         function toggleTimer() {
@@ -438,27 +593,25 @@
             
             if (isRunning) {
                 clearInterval(timerInterval);
+                pausedElapsed = getElapsedTime();
+                startTime = null;
                 isRunning = false;
                 btn.textContent = '▶ 시작';
                 btn.className = 'btn btn-start';
             } else {
-                if (timeElapsed < maxTime) {
+                if (getElapsedTime() < maxTime) {
+                    startTime = Date.now();
                     isRunning = true;
+                    timerEnded = false;
                     btn.textContent = '⏸ 일시정지';
                     btn.className = 'btn btn-pause';
                     
-                    timerInterval = setInterval(() => {
-                        timeElapsed++;
-                        updateDisplay();
-                        
-                        if (timeElapsed >= maxTime) {
-                            clearInterval(timerInterval);
-                            isRunning = false;
-                            btn.textContent = '▶ 시작';
-                            btn.className = 'btn btn-start';
-                            alert('🔔 시험시간이 종료되었습니다.');
-                        }
-                    }, 1000);
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                    }
+                    
+                    timerInterval = setInterval(updateDisplay, 500);
+                    updateDisplay();
                 }
             }
         }
@@ -468,11 +621,13 @@
                 alert('모든 단계가 기록되었습니다.');
                 return;
             }
-            if (!isRunning && timeElapsed === 0) {
+            
+            const elapsed = getElapsedTime();
+            if (!isRunning && elapsed === 0) {
                 alert('타이머를 먼저 시작해주세요.');
                 return;
             }
-            timestamps.push(timeElapsed);
+            timestamps.push(elapsed);
             updateTimestampDisplay();
         }
 
@@ -504,8 +659,11 @@
 
         function resetTimer() {
             clearInterval(timerInterval);
+            timerInterval = null;
             isRunning = false;
-            timeElapsed = 0;
+            startTime = null;
+            pausedElapsed = 0;
+            timerEnded = false;
             timestamps = [];
             updateDisplay();
             updateTimestampDisplay();
@@ -517,160 +675,38 @@
             document.getElementById('record-btn').disabled = false;
         }
 
-        function goBackFromTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timeElapsed = 0;
-            timestamps = [];
-            updateDisplay();
-            updateTimestampDisplay();
-            
-            const btn = document.getElementById('start-btn');
-            btn.textContent = '▶ 시작';
-            btn.className = 'btn btn-start';
-            
-            document.getElementById('record-btn').disabled = false;
-            
+        function goBackToMain() {
+            if (currentScreen === 'timer') {
+                resetTimer();
+            }
+
+            // ✅ 메인으로 돌아갈 때는 핀치줌 차단도 해제
+            document.body.classList.remove('timer-no-zoom');
+
             currentScreen = 'main';
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('main-screen').classList.add('active');
         }
 
-        function goBackFromImage() {
-            currentScreen = 'main';
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('main-screen').classList.add('active');
-        }
-
-        // 전체화면 뷰어 열기
-        function openViewer() {
-            const viewer = document.getElementById('fullscreen-viewer');
-            const fullscreenImg = document.getElementById('fullscreen-image');
-            const originalImg = document.querySelector('.image-container img');
-            
-            fullscreenImg.src = originalImg.src;
-            viewer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            scale = 1;
-            posX = 0;
-            posY = 0;
-            updateTransform();
-        }
-
-        // 전체화면 뷰어 닫기
-        function closeViewer() {
-            const viewer = document.getElementById('fullscreen-viewer');
-            viewer.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            
-            scale = 1;
-            posX = 0;
-            posY = 0;
-        }
-
-        // 이미지 변환 적용
-        function updateTransform() {
-            const img = document.getElementById('fullscreen-image');
-            img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-        }
-
-        // 두 손가락 사이 거리 계산
-        function getDistance(touches) {
-            const dx = touches[0].clientX - touches[1].clientX;
-            const dy = touches[0].clientY - touches[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        // 터치 이벤트 설정
-        const viewer = document.getElementById('fullscreen-viewer');
-
-        viewer.addEventListener('touchstart', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                startDistance = getDistance(e.touches);
-                lastScale = scale;
-            } else if (e.touches.length === 1) {
-                startX = e.touches[0].clientX - posX;
-                startY = e.touches[0].clientY - posY;
-                isDragging = true;
+        // 페이지 복귀 시 시간 업데이트
+        function handlePageResume() {
+            if (isRunning) {
+                updateDisplay();
             }
-        }, { passive: false });
+        }
 
-        viewer.addEventListener('touchmove', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const currentDistance = getDistance(e.touches);
-                scale = Math.min(Math.max(lastScale * (currentDistance / startDistance), 1), 5);
-                updateTransform();
-            } else if (e.touches.length === 1 && isDragging && scale > 1) {
-                e.preventDefault();
-                posX = e.touches[0].clientX - startX;
-                posY = e.touches[0].clientY - startY;
-                updateTransform();
-            }
-        }, { passive: false });
-
-        viewer.addEventListener('touchend', function(e) {
-            isDragging = false;
-            lastScale = scale;
-            
-            if (scale <= 1) {
-                scale = 1;
-                posX = 0;
-                posY = 0;
-                updateTransform();
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                handlePageResume();
             }
         });
 
-        // 더블탭으로 확대/축소
-        let lastTap = 0;
-        viewer.addEventListener('touchend', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-                if (scale > 1) {
-                    scale = 1;
-                    posX = 0;
-                    posY = 0;
-                } else {
-                    scale = 2.5;
-                }
-                updateTransform();
-                lastScale = scale;
-            }
-            lastTap = currentTime;
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeViewer();
-            }
-        });
-
-        viewer.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            scale = Math.min(Math.max(scale * delta, 1), 5);
-            updateTransform();
-            lastScale = scale;
-        }, { passive: false });
+        window.addEventListener('focus', handlePageResume);
+        window.addEventListener('pageshow', handlePageResume);
 
         // 브라우저/핸드폰 뒤로가기 버튼 지원
         window.addEventListener('popstate', function(e) {
-            if (currentScreen === 'timer') {
-                goBackFromTimer();
-            } else if (currentScreen === 'image') {
-                goBackFromImage();
-            }
+            goBackToMain();
         });
 
         // 페이지 로드 시 초기 히스토리 상태 설정
