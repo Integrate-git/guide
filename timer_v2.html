@@ -241,48 +241,22 @@
         }
     
 
-        /* ===== 메인 화면 하단 홍보/링크 영역 ===== */
-        .it-footer {
+                /* ===== integrate.kr 하단 푸터 구성(차용) ===== */
+        .ig-footer {
             margin-top: 22px;
-            padding: 18px 16px;
+            padding: 18px 12px 16px;
             border-top: 1px solid rgba(0,0,0,.08);
-            background: #fff;
-            border-radius: 14px;
-        }
-        .it-footer__inner {
-            max-width: 960px;
-            margin: 0 auto;
-            display: grid;
-            gap: 12px;
-            justify-items: center;
-            text-align: center;
         }
 
-        .it-footer__cta {
-            width: min(360px, 100%);
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 0;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 15px;
-            color: #fff;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            transition: transform .12s ease, box-shadow .12s ease;
-            display: inline-flex;
+        .ig-footer__sns {
+            display: flex;
+            gap: 10px;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            margin-bottom: 12px;
         }
-        .it-footer__cta:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(0,0,0,.12);
-        }
-        .it-footer__cta:active { transform: translateY(0); }
 
-        .it-footer__sns { display: flex; gap: 10px; align-items: center; }
-
-        .it-sns {
+        .ig-sns {
             width: 40px;
             height: 40px;
             display: inline-flex;
@@ -291,63 +265,101 @@
             border-radius: 999px;
             border: 1px solid rgba(0,0,0,.12);
             text-decoration: none;
-            transition: transform .12s ease, box-shadow .12s ease;
             background: #fff;
+            transition: transform .12s ease, box-shadow .12s ease;
         }
-        .it-sns:hover {
+        .ig-sns:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 18px rgba(0,0,0,.08);
         }
-        .it-sns svg {
+        .ig-sns svg {
             width: 20px;
             height: 20px;
             fill: #111;
         }
 
-        .it-footer__copyright {
+        .ig-footer__menu,
+        .ig-footer__legal {
+            display: flex;
+            justify-content: center;
+        }
+
+        .ig-footer__menu-list,
+        .ig-footer__legal-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px 0;
+        }
+
+        .ig-footer__menu-list li,
+        .ig-footer__legal-list li {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .ig-footer__menu-list li + li::before,
+        .ig-footer__legal-list li + li::before {
+            content: "·";
+            margin: 0 10px;
+            color: rgba(0,0,0,.35);
+        }
+
+        .ig-footer__menu-list a,
+        .ig-footer__legal-list a {
+            font-size: 13px;
+            color: rgba(0,0,0,.78);
+            text-decoration: none;
+        }
+        .ig-footer__menu-list a:hover,
+        .ig-footer__legal-list a:hover {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .ig-footer__info {
+            margin: 12px 0 10px;
+            display: grid;
+            gap: 6px;
+            color: rgba(0,0,0,.70);
+            font-size: 12.5px;
+            line-height: 1.35;
+            text-align: center;
+        }
+        .ig-footer__info p { margin: 0; }
+        .ig-footer__info a {
+            color: inherit;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .ig-footer__copyright {
             margin: 0;
             font-size: 12.5px;
             color: rgba(0,0,0,.65);
+            text-align: center;
         }
-
-        .it-footer__details {
-            width: min(720px, 100%);
-            border: 1px solid rgba(0,0,0,.10);
-            border-radius: 12px;
-            padding: 10px 12px;
-            background: #fff;
-        }
-        .it-footer__summary {
-            cursor: pointer;
-            list-style: none;
-            font-size: 13px;
-            color: rgba(0,0,0,.78);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            user-select: none;
-        }
-        .it-footer__summary::-webkit-details-marker { display: none; }
-
-        .it-footer__chev { transition: transform .15s ease; }
-        details[open] .it-footer__chev { transform: rotate(180deg); }
-
-        .it-footer__panel { padding-top: 10px; }
-        .it-footer__dl { margin: 0; display: grid; gap: 8px; text-align: left; }
-        .it-footer__row {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 10px;
-            align-items: start;
-        }
-        .it-footer__row dt { font-weight: 600; color: rgba(0,0,0,.75); }
-        .it-footer__row dd { margin: 0; color: rgba(0,0,0,.70); }
-        .it-footer__row a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
         @media (max-width: 480px) {
-            .it-footer__row { grid-template-columns: 1fr; }
-            .it-footer__dl { text-align: left; }
+            .ig-footer {
+                padding: 16px 10px 14px;
+            }
+            .ig-footer__menu-list a,
+            .ig-footer__legal-list a {
+                font-size: 12.5px;
+            }
+            .ig-footer__info,
+            .ig-footer__copyright {
+                font-size: 12px;
+            }
+            .ig-footer__menu-list li + li::before,
+            .ig-footer__legal-list li + li::before {
+                margin: 0 8px;
+            }
         }
 
         /* ===== 타이머 화면에서만 핀치줌 방지(지원 브라우저) ===== */
@@ -370,93 +382,49 @@
             </button>
 
             <!-- ✅ 메인 화면 하단: 회사/SNS/교재 링크 (메인 화면에서만 표시) -->
-            <footer class="it-footer" role="contentinfo">
-              <div class="it-footer__inner">
+                        <footer class="ig-footer" role="contentinfo" aria-label="인터그레이트 푸터">
+                <!-- SNS 바로가기 -->
+                <div class="ig-footer__sns" aria-label="SNS 바로가기">
+                    <a
+                        class="ig-sns"
+                        href="https://www.instagram.com/lhw_math/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="인스타그램으로 이동"
+                        title="Instagram"
+                    >
+                        <!-- Instagram SVG (simple) -->
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9A3.5 3.5 0 0 0 20 16.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.6-2.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z" />
+                        </svg>
+                    </a>
 
-                <!-- 교재 판매 페이지 버튼 (원하는 링크로 교체하세요) -->
-                <a
-                  class="it-footer__cta"
-                  href="https://example.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="교재 판매 페이지로 이동"
-                >
-                  📚 교재 구매하러 가기
-                </a>
+                    <a
+                        class="ig-sns"
+                        href="https://cafe.naver.com/pnmath"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="네이버 카페로 이동"
+                        title="Naver Cafe"
+                    >
+                        <!-- Naver Cafe: simple 'N' badge SVG -->
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm1.8 15.6V5.4h2.2l4.1 7.1V5.4h2.1v13.2h-2.2l-4.1-7.1v7.1H7.8Z" />
+                        </svg>
+                    </a>
+                </div>
 
-                <!-- 1) 인스타그램 / 2) 네이버 카페 아이콘 -->
-                <nav class="it-footer__sns" aria-label="SNS 링크">
-                  <a
-                    class="it-sns"
-                    href="https://www.instagram.com/lhw_math/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="인스타그램으로 이동"
-                    title="Instagram"
-                  >
-                    <!-- Instagram SVG (simple) -->
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                      <path
-                        d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9A3.5 3.5 0 0 0 20 16.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.6-2.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"
-                      />
-                    </svg>
-                  </a>
+                <!-- 회사 정보 -->
+                <div class="ig-footer__info" aria-label="회사 정보">
+                    <p>주소 : 서울특별시 강남구 선릉로 608 (삼성동, 선진빌딩 6층)</p>
+                    <p>㈜ 인터그레이트 | 대표이사: 이해원</p>
+                    <p>사업자등록번호: 401-87-02099</p>
+                    <p>이메일: <a href="mailto:info@integrate.kr">info@integrate.kr</a></p>
+                </div>
 
-                  <a
-                    class="it-sns"
-                    href="https://cafe.naver.com/pnmath"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="네이버 카페로 이동"
-                    title="Naver Cafe"
-                  >
-                    <!-- Naver Cafe: simple 'N' badge SVG -->
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                      <path
-                        d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm1.8 15.6V5.4h2.2l4.1 7.1V5.4h2.1v13.2h-2.2l-4.1-7.1v7.1H7.8Z"
-                      />
-                    </svg>
-                  </a>
-                </nav>
-
-                <!-- 3) Copyright 문구 -->
-                <p class="it-footer__copyright">
-                  Copyright © 2025 ㈜ 인터그레이트 All rights reserved.
+                <p class="ig-footer__copyright">
+                    Copyright © 2025 ㈜ 인터그레이트 All rights reserved.
                 </p>
-
-                <!-- 4) 드롭다운 사업자 정보 (HTML details/summary) -->
-                <details class="it-footer__details">
-                  <summary class="it-footer__summary">
-                    (주) 인터그레이트 사업자 정보
-                    <span class="it-footer__chev" aria-hidden="true">▾</span>
-                  </summary>
-
-                  <div class="it-footer__panel" role="group" aria-label="사업자 정보">
-                    <dl class="it-footer__dl">
-                      <div class="it-footer__row">
-                        <dt>주소</dt>
-                        <dd>서울특별시 강남구 선릉로 608 (삼성동, 선진빌딩 6층)</dd>
-                      </div>
-                      <div class="it-footer__row">
-                        <dt>법인</dt>
-                        <dd>㈜ 인터그레이트</dd>
-                      </div>
-                      <div class="it-footer__row">
-                        <dt>대표이사</dt>
-                        <dd>이해원</dd>
-                      </div>
-                      <div class="it-footer__row">
-                        <dt>사업자등록번호</dt>
-                        <dd>401-87-02099</dd>
-                      </div>
-                      <div class="it-footer__row">
-                        <dt>이메일</dt>
-                        <dd><a href="mailto:info@integrate.kr">info@integrate.kr</a></dd>
-                      </div>
-                    </dl>
-                  </div>
-                </details>
-              </div>
             </footer>
         </div>
 
