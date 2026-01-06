@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>한완기 실전편 - 전략 수립</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-image {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .btn-timer {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-start {
+            background: #28a745;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-pause {
+            background: #ffc107;
+            color: #333;
+            flex: 1;
+        }
+
+        .btn-reset {
+            background: #dc3545;
+            color: white;
+            flex: 1;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .image-caption {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .zoom-hint {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* 전체화면 이미지 뷰어 */
+        .fullscreen-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .fullscreen-viewer.active {
+            display: block;
+        }
+
+        .fullscreen-image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .fullscreen-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform 0.1s ease-out;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            font-size: 36px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .viewer-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 1001;
+        }
+
+        .timer-display {
+            font-size: 72px;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timer-label {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .timer-buttons .btn {
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .emoji {
+            font-size: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .timer-display {
+                font-size: 50px;
+            }
+
+            .btn {
+                padding: 15px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 메인 화면 -->
+        <div id="main-screen" class="screen active">
+            <h1>한완기 실전편</h1>
+            <button class="btn btn-image" onclick="showScreen('image')">
+                단계별 전략 수립
+            </button>
+            <button class="btn btn-timer" onclick="showScreen('timer')">
+                <span class="emoji">⏱️</span>
+                100분 타이머
+            </button>
+        </div>
+
+        <!-- 이미지 화면 -->
+        <div id="image-screen" class="screen">
+            <h1>단계별 전략 수립</h1>
+            <div class="image-container">
+                <img src="단계별 전략.png" alt="단계별 전략 20260106" onclick="openViewer()">
+            </div>
+            <button class="btn btn-back" onclick="showScreen('main')">
+                ← 뒤로 가기
+            </button>
+        </div>
+
+        <!-- 타이머 화면 -->
+        <div id="timer-screen" class="screen">
+            <h1>⏱️ 100분 타이머</h1>
+            <p class="timer-label">남은 시간</p>
+            <div class="timer-display" id="timer-display">100:00</div>
+            <div class="timer-buttons">
+                <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">
+                    ▶ 시작
+                </button>
+                <button class="btn btn-reset" onclick="resetTimer()">
+                    ↺ 리셋
+                </button>
+            </div>
+            <button class="btn btn-back" onclick="goBackFromTimer()">
+                ← 뒤로 가기
+            </button>
+        </div>
+    </div>
+
+    <!-- 전체화면 이미지 뷰어 -->
+    <div id="fullscreen-viewer" class="fullscreen-viewer">
+        <button class="close-btn" onclick="closeViewer()">✕</button>
+        <div class="fullscreen-image-container">
+            <img id="fullscreen-image" class="fullscreen-image" src="" alt="확대 이미지">
+        </div>
+        <div class="viewer-hint">두 손가락으로 확대/축소 • 드래그로 이동</div>
+    </div>
+
+    <script>
+        // 타이머 관련 변수
+        let timeLeft = 100 * 60;
+        let timerInterval = null;
+        let isRunning = false;
+
+        // 핀치 줌 관련 변수
+        let scale = 1;
+        let posX = 0;
+        let posY = 0;
+        let lastPosX = 0;
+        let lastPosY = 0;
+        let lastScale = 1;
+        let startDistance = 0;
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screen + '-screen').classList.add('active');
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+        }
+
+        function updateDisplay() {
+            document.getElementById('timer-display').textContent = formatTime(timeLeft);
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('start-btn');
+            
+            if (isRunning) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                btn.textContent = '▶ 시작';
+                btn.className = 'btn btn-start';
+            } else {
+                if (timeLeft > 0) {
+                    isRunning = true;
+                    btn.textContent = '⏸ 일시정지';
+                    btn.className = 'btn btn-pause';
+                    
+                    timerInterval = setInterval(() => {
+                        timeLeft--;
+                        updateDisplay();
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            btn.textContent = '▶ 시작';
+                            btn.className = 'btn btn-start';
+                            alert('⏰ 타이머 종료!');
+                        }
+                    }, 1000);
+                }
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 100 * 60;
+            updateDisplay();
+            
+            const btn = document.getElementById('start-btn');
+            btn.textContent = '▶ 시작';
+            btn.className = 'btn btn-start';
+        }
+
+        function goBackFromTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 100 * 60;
+            updateDisplay();
+            
+            const btn = document.getElementById('start-btn');
+            btn.textContent = '▶ 시작';
+            btn.className = 'btn btn-start';
+            
+            showScreen('main');
+        }
+
+        // 전체화면 뷰어 열기
+        function openViewer() {
+            const viewer = document.getElementById('fullscreen-viewer');
+            const fullscreenImg = document.getElementById('fullscreen-image');
+            const originalImg = document.querySelector('.image-container img');
+            
+            fullscreenImg.src = originalImg.src;
+            viewer.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // 초기화
+            scale = 1;
+            posX = 0;
+            posY = 0;
+            updateTransform();
+        }
+
+        // 전체화면 뷰어 닫기
+        function closeViewer() {
+            const viewer = document.getElementById('fullscreen-viewer');
+            viewer.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // 초기화
+            scale = 1;
+            posX = 0;
+            posY = 0;
+        }
+
+        // 이미지 변환 적용
+        function updateTransform() {
+            const img = document.getElementById('fullscreen-image');
+            img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+
+        // 두 손가락 사이 거리 계산
+        function getDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        // 두 손가락 중심점 계산
+        function getCenter(touches) {
+            return {
+                x: (touches[0].clientX + touches[1].clientX) / 2,
+                y: (touches[0].clientY + touches[1].clientY) / 2
+            };
+        }
+
+        // 터치 이벤트 설정
+        const viewer = document.getElementById('fullscreen-viewer');
+        const fullscreenImg = document.getElementById('fullscreen-image');
+
+        // 터치 시작
+        viewer.addEventListener('touchstart', function(e) {
+            if (e.target === document.querySelector('.close-btn')) return;
+            
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                startDistance = getDistance(e.touches);
+                lastScale = scale;
+            } else if (e.touches.length === 1) {
+                startX = e.touches[0].clientX - posX;
+                startY = e.touches[0].clientY - posY;
+                isDragging = true;
+            }
+        }, { passive: false });
+
+        // 터치 이동
+        viewer.addEventListener('touchmove', function(e) {
+            if (e.target === document.querySelector('.close-btn')) return;
+            
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const currentDistance = getDistance(e.touches);
+                scale = Math.min(Math.max(lastScale * (currentDistance / startDistance), 1), 5);
+                updateTransform();
+            } else if (e.touches.length === 1 && isDragging && scale > 1) {
+                e.preventDefault();
+                posX = e.touches[0].clientX - startX;
+                posY = e.touches[0].clientY - startY;
+                updateTransform();
+            }
+        }, { passive: false });
+
+        // 터치 종료
+        viewer.addEventListener('touchend', function(e) {
+            isDragging = false;
+            lastScale = scale;
+            
+            // 스케일이 1 이하면 위치 초기화
+            if (scale <= 1) {
+                scale = 1;
+                posX = 0;
+                posY = 0;
+                updateTransform();
+            }
+        });
+
+        // 더블탭으로 확대/축소
+        let lastTap = 0;
+        viewer.addEventListener('touchend', function(e) {
+            if (e.target === document.querySelector('.close-btn')) return;
+            
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            
+            if (tapLength < 300 && tapLength > 0) {
+                e.preventDefault();
+                if (scale > 1) {
+                    scale = 1;
+                    posX = 0;
+                    posY = 0;
+                } else {
+                    scale = 2.5;
+                }
+                updateTransform();
+                lastScale = scale;
+            }
+            lastTap = currentTime;
+        });
+
+        // ESC 키로 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeViewer();
+            }
+        });
+
+        // 마우스 휠로 확대/축소 (PC용)
+        viewer.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            scale = Math.min(Math.max(scale * delta, 1), 5);
+            updateTransform();
+            lastScale = scale;
+        }, { passive: false });
+    </script>
+</body>
+</html>
