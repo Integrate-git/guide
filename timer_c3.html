@@ -22,21 +22,20 @@
             padding: 20px;
         }
 
-        /* container는 이제 위치 잡는 역할만 하고, 배경색/그림자는 white-box로 이동 */
         .container {
-            max-width: 600px; /* 모바일 보기에 적당한 폭으로 조정 (기존 1000px는 너무 넓음) */
+            max-width: 600px;
             width: 100%;
             text-align: center;
         }
 
-        /* 🆕 새로 추가된 하얀색 박스 스타일 */
+        /* 흰색 박스 스타일 */
         .white-box {
             background: #ffffff;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10); /* 그림자 강도 약간 조절 */
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
             border: 1px solid #e2e8f0;
-            margin-bottom: 30px; /* 박스와 아래 푸터 사이 간격 */
+            margin-bottom: 30px;
         }
 
         h1 {
@@ -46,9 +45,9 @@
             font-weight: bold;
         }
 
-        /* 🆕 INTEGRATE 섹션 간격 조정용 클래스 */
+        /* INTEGRATE 섹션 타이틀 */
         .integrate-title {
-            margin-top: 60px; /* 1. 요청하신 대로 위쪽 간격을 넓힘 */
+            margin-top: 60px;
             margin-bottom: 20px;
             font-size: 22px;
             font-weight: 800;
@@ -81,6 +80,7 @@
             transform: translateY(0);
         }
 
+        /* 버튼 1, 2 */
         .btn-image {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -92,26 +92,29 @@
             color: white;
         }
 
+        /* ✅ 버튼 3: Q&A (흰색 글씨 + 부드러운 블루) */
         .btn-cafe {
-            background: #bfdbfe;
-            color: #1e3a8a;
+            background: #60a5fa; /* 기존보다 약간 진한 파스텔 블루 */
+            color: white; /* 폰트 흰색으로 변경 */
             margin-bottom: 15px;
         }
         .btn-cafe:hover {
-            background: #93c5fd;
-            box-shadow: 0 8px 25px rgba(191, 219, 254, 0.6);
+            background: #3b82f6;
+            box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6);
         }
 
+        /* ✅ 버튼 4: 정오표 (흰색 글씨 + 부드러운 레드/핑크) */
         .btn-correction {
-            background: #fecaca;
-            color: #991b1b;
+            background: #f87171; /* 기존보다 약간 진한 파스텔 레드 */
+            color: white; /* 폰트 흰색으로 변경 */
             margin-bottom: 15px;
         }
         .btn-correction:hover {
-            background: #fca5a5;
-            box-shadow: 0 8px 25px rgba(252, 165, 165, 0.6);
+            background: #ef4444;
+            box-shadow: 0 8px 25px rgba(248, 113, 113, 0.6);
         }
 
+        /* 버튼 5: 교재 구매 */
         .btn-book {
             background: #1e293b;
             color: white;
@@ -175,9 +178,8 @@
             .timer-buttons .btn { flex: 1 1 45%; }
         }
 
-        /* ===== 2. 하단 정보(푸터) 스타일 수정 ===== */
+        /* 하단 푸터 스타일 */
         .ig-footer {
-            /* 상단 테두리 제거 (박스 밖으로 나왔으므로) */
             margin-top: 0; 
             padding: 0 12px 20px;
         }
@@ -189,7 +191,6 @@
         .ig-sns {
             width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;
             border-radius: 999px; text-decoration: none;
-            /* 배경색을 흰색으로 변경하여 회색 배경 위에서 돋보이게 함 */
             background: #ffffff; 
             border: 1px solid #e2e8f0;
             transition: transform .12s ease, box-shadow .12s ease; color: #94a3b8;
@@ -201,7 +202,7 @@
         
         .ig-footer__info {
             margin: 12px 0 10px; display: grid; gap: 6px;
-            color: #64748b; /* 글자색을 약간 더 진하게 */
+            color: #64748b;
             font-size: 12.5px; line-height: 1.35; text-align: center;
         }
         .ig-footer__info p { margin: 0; }
@@ -232,7 +233,7 @@
                 <h1 class="integrate-title">INTEGRATE</h1>
                 
                 <a href="https://cafe.naver.com/f-e/cafes/23380319/menus/427?t=1756279915781" target="_blank" class="btn btn-cafe">
-                    <span class="emoji">❔</span>
+                    <span class="emoji">❓</span>
                     이해원연구소 Q&A
                 </a>
 
@@ -245,7 +246,9 @@
                     <span class="emoji">📚</span>
                     2027 한권으로 완성하는 기출
                 </a>
-            </div> <footer class="ig-footer" role="contentinfo">
+            </div>
+
+            <footer class="ig-footer" role="contentinfo">
                 <div class="ig-footer__sns">
                     <a href="https://www.instagram.com/lhw_math/" target="_blank" class="ig-sns ig-sns--instagram">
                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
