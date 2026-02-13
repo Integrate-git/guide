@@ -15,13 +15,11 @@
             align-items: center; 
             justify-content: center; 
             padding: 20px;
-            /* 화면 흔들림 방지 */
-            touch-action: pan-y;
         }
         
         .container { max-width: 600px; width: 100%; text-align: center; }
 
-        /* [로고] 상단 로고 스타일 */
+        /* [로고] */
         .main-logo {
             width: 220px;
             height: auto;
@@ -29,7 +27,7 @@
             mix-blend-mode: multiply;
         }
 
-        /* [박스] 화이트 박스 스타일 */
+        /* [박스] */
         .white-box { 
             background: #ffffff; 
             border-radius: 20px; 
@@ -62,8 +60,7 @@
             gap: 12px; 
             text-decoration: none; 
             margin-bottom: 15px;
-            /* 버튼 위에서 더블탭 확대 방지 */
-            touch-action: manipulation;
+            touch-action: manipulation; /* 버튼 더블탭 확대 방지 */
         }
         .btn:hover { 
             transform: translateY(-2px); 
@@ -71,43 +68,25 @@
         }
         .btn:active { transform: translateY(0); }
 
-        /* 메인 메뉴 버튼 */
-        .btn-image {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-timer {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        /* 타이머 조작 버튼 */
+        /* 버튼 색상 */
+        .btn-image { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-timer { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
         .btn-start { background: #28a745; color: white; flex: 1; margin-bottom: 0; }
         .btn-pause { background: #ffc107; color: #333; flex: 1; margin-bottom: 0; }
         .btn-reset { background: #dc3545; color: white; flex: 1; margin-bottom: 0; }
         .btn-record { background: #17a2b8; color: white; flex: 1; margin-bottom: 0; }
-        
-        .btn-record:disabled { 
-            background: #ccc; 
-            cursor: not-allowed; 
-            transform: none; 
-            box-shadow: none; 
-        }
+        .btn-record:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-back { background: #6c757d; color: white; margin-top: 20px; }
 
-        /* 뒤로가기 버튼 */
-        .btn-back { 
-            background: #6c757d; 
-            color: white; 
-            margin-top: 20px; 
-        }
-
-        /* 기능 관련 스타일 */
+        /* 화면 전환 */
         .screen { display: none; }
         .screen.active { display: block; }
+        
+        /* 이미지 컨테이너 */
         .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
         .zoom-hint { color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
 
+        /* 타이머 스타일 */
         .timer-display {
             font-size: 64px;
             font-weight: bold;
@@ -118,7 +97,6 @@
         }
         .timer-label { color: #64748b; font-size: 18px; margin-bottom: 10px; }
         .timer-hint { color: #94a3b8; font-size: 13px; margin-bottom: 5px; }
-        
         .timer-buttons { display: flex; gap: 10px; margin-bottom: 10px; }
         .timer-buttons .btn { padding: 14px; font-size: 16px; }
 
@@ -130,11 +108,10 @@
         }
         .timestamp-title { font-size: 16px; color: #64748b; margin-bottom: 10px; }
         .timestamp-list { display: flex; flex-direction: column; gap: 8px; }
-        
         .timestamp-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 15px; background: white; border-radius: 8px;
-            border-left: 4px solid #17a2b8; /* 기록 색상도 원복 */
+            border-left: 4px solid #17a2b8;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .timestamp-item.empty { color: #94a3b8; border-left-color: #cbd5e1; justify-content: center; }
@@ -143,7 +120,7 @@
         .record-count { font-size: 14px; color: #94a3b8; margin-top: 10px; }
         .emoji { font-size: 24px; }
 
-        /* [푸터 스타일] */
+        /* 푸터 */
         .ig-footer { padding: 0 12px 20px; }
         .ig-footer__sns { display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 15px; }
         .ig-sns { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; text-decoration: none; background: #ffffff; border: 1px solid #e2e8f0; transition: transform .12s ease, box-shadow .12s ease; color: #94a3b8; }
@@ -184,6 +161,7 @@
 
             <div id="image-screen" class="screen">
                 <h1>단계별 전략 수립</h1>
+                <p class="zoom-hint">🔍 두 손가락으로 페이지 전체를 확대/축소할 수 있어요</p>
                 <div class="image-container">
                     <img src="단계별_전략.png" alt="단계별 전략">
                     <button class="btn btn-back" onclick="goBackToMain()">
@@ -244,40 +222,29 @@
     </div>
 
     <script>
-        // ==========================================
-        // [1] 줌(확대) 제어 로직 (여기가 추가된 핵심!)
-        // ==========================================
-        
-        // 현재 화면이 'image'일 때만 true 반환
-        function isZoomAllowed() {
-            return currentScreen === 'image';
-        }
-
-        // 핀치 줌(손가락 두 개) 감지 시 차단하는 함수
         function blockZoomGesture(e) {
-            // 이미지 화면이면 줌을 허용(함수 종료)
-            if (isZoomAllowed()) return;
+            if (currentScreen === 'image') return; // 이미지 화면이면 줌 허용
 
-            // 손가락이 2개 이상(핀치 줌)이면 차단(preventDefault)
             if (e.touches && e.touches.length > 1) {
                 e.preventDefault();
             }
         }
 
-        // 터치 이벤트 리스너 등록
+        // passive: false 옵션이 있어야 preventDefault()가 작동합니다.
         document.addEventListener('touchmove', blockZoomGesture, { passive: false });
         document.addEventListener('touchstart', blockZoomGesture, { passive: false });
 
-        // iOS Safari 전용 제스처 이벤트 차단
+        // iOS Safari 제스처 이벤트 차단
         document.addEventListener('gesturestart', function(e) {
-            if (!isZoomAllowed()) e.preventDefault();
+            if (currentScreen !== 'image') e.preventDefault();
         });
         document.addEventListener('gesturechange', function(e) {
-            if (!isZoomAllowed()) e.preventDefault();
+            if (currentScreen !== 'image') e.preventDefault();
         });
 
+
         // ==========================================
-        // [2] 기존 타이머 및 앱 연동 로직
+        // 기존 기능 (타이머, 화면 전환, 앱 연동)
         // ==========================================
         const maxTime = 100 * 60;
         let timerInterval = null;
