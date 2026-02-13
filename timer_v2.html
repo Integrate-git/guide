@@ -5,408 +5,253 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>한완기 실전편 - 전략 수립</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* [공통] link.html의 기본 스타일 적용 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: #eef2f7; 
+            color: #0f172a; 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
         }
+        
+        /* 컨테이너 너비를 link.html 기준(600px)으로 맞춤 */
+        .container { max-width: 600px; width: 100%; text-align: center; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 1000px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
+        /* [로고] 상단 로고 스타일 */
+        .main-logo {
+            width: 220px;
+            height: auto;
             margin-bottom: 30px;
-            font-size: 28px;
+            mix-blend-mode: multiply; /* 배경 투명화 트릭 */
         }
 
-        .btn {
-            width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+        /* [박스] 화이트 박스 스타일 */
+        .white-box { 
+            background: #ffffff; 
+            border-radius: 20px; 
+            padding: 40px; 
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10); 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 30px; 
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        h1 { 
+            color: #0f172a; 
+            margin-bottom: 30px; 
+            font-size: 28px; 
+            font-weight: bold; 
         }
 
-        .btn:active {
-            transform: translateY(0);
+        /* [버튼] 기본 스타일 (link.html 스타일) */
+        .btn { 
+            width: 100%; 
+            padding: 18px; 
+            font-size: 18px; 
+            font-weight: 600; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            margin-bottom: 15px; /* 버튼 간 간격 추가 */
+        }
+        .btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+        }
+        .btn:active { transform: translateY(0); }
+
+        /* 메인 메뉴 버튼 (파란색 통일) */
+        .btn-menu { background: #60a5fa; color: white; }
+        .btn-menu:hover { background: #3b82f6; box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6); }
+
+        /* 뒤로가기 버튼 */
+        .btn-back { background: #94a3b8; color: white; margin-top: 20px; }
+        .btn-back:hover { background: #64748b; }
+
+        /* [타이머 기능 버튼] 색상은 유지하되 디자인은 새 테마에 맞춤 */
+        .btn-start { background: #22c55e; color: white; flex: 1; margin-bottom: 0; } /* Green */
+        .btn-pause { background: #fbbf24; color: #0f172a; flex: 1; margin-bottom: 0; } /* Yellow */
+        .btn-reset { background: #ef4444; color: white; flex: 1; margin-bottom: 0; } /* Red */
+        .btn-record { background: #0ea5e9; color: white; flex: 1; margin-bottom: 0; } /* Sky Blue */
+        
+        .btn-record:disabled { 
+            background: #cbd5e1; 
+            cursor: not-allowed; 
+            transform: none; 
+            box-shadow: none; 
         }
 
-        .btn-image {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-bottom: 15px;
-        }
+        /* [화면 전환 로직] */
+        .screen { display: none; }
+        .screen.active { display: block; }
 
-        .btn-timer {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
+        /* [이미지 뷰어 스타일] */
+        .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+        .zoom-hint { color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
 
-        .btn-back {
-            background: #6c757d;
-            color: white;
-            margin-top: 20px;
-        }
-
-        .btn-start {
-            background: #28a745;
-            color: white;
-            flex: 1;
-        }
-
-        .btn-pause {
-            background: #ffc107;
-            color: #333;
-            flex: 1;
-        }
-
-        .btn-reset {
-            background: #dc3545;
-            color: white;
-            flex: 1;
-        }
-
-        .btn-record {
-            background: #17a2b8;
-            color: white;
-            flex: 1;
-        }
-
-        .btn-record:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .screen {
-            display: none;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        .image-container img {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-
-        .image-caption {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .zoom-hint {
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        /* 전체화면 이미지 뷰어 */
-        .fullscreen-viewer {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            overflow: hidden;
-            touch-action: none;
-        }
-
-        .fullscreen-viewer.active {
-            display: block;
-        }
-
-        .fullscreen-image-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .fullscreen-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transform-origin: center center;
-            transition: transform 0.1s ease-out;
-        }
-
-        .close-btn {
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            font-size: 36px;
-            color: white;
-            cursor: pointer;
-            z-index: 1001;
-            background: rgba(0,0,0,0.5);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-        }
-
-        .viewer-hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 14px;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 20px;
-            border-radius: 20px;
-            z-index: 1001;
-        }
-
+        /* [타이머 디스플레이 스타일] */
         .timer-display {
-            font-size: 72px;
+            font-size: 64px; /* 모바일 대응을 위해 약간 축소 */
             font-weight: bold;
-            color: #333;
+            color: #0f172a;
             font-family: 'Courier New', monospace;
             margin: 30px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(15, 23, 42, 0.08);
         }
+        .timer-label { color: #64748b; font-size: 18px; margin-bottom: 10px; }
+        .timer-hint { color: #94a3b8; font-size: 13px; margin-bottom: 5px; }
+        
+        .timer-buttons { display: flex; gap: 10px; margin-bottom: 10px; }
+        .timer-buttons .btn { padding: 14px; font-size: 16px; }
 
-        .timer-label {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .timer-hint {
-            color: #999;
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
-
-        .timer-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .timer-buttons .btn {
-            padding: 14px;
-            font-size: 16px;
-        }
-
-        /* 타임스탬프 기록 영역 */
+        /* [타임스탬프 기록 영역 스타일] */
         .timestamp-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
+            margin-top: 20px; padding: 15px; 
+            background: #f8fafc; /* 아주 연한 회색 */
             border-radius: 12px;
+            border: 1px solid #e2e8f0;
         }
-
-        .timestamp-title {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .timestamp-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
+        .timestamp-title { font-size: 16px; color: #64748b; margin-bottom: 10px; }
+        .timestamp-list { display: flex; flex-direction: column; gap: 8px; }
+        
         .timestamp-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: white;
-            border-radius: 8px;
-            border-left: 4px solid #17a2b8;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; background: white; border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+        .timestamp-item.empty { color: #94a3b8; border-left-color: #cbd5e1; justify-content: center; }
+        .timestamp-number { font-weight: 600; color: #0ea5e9; }
+        .timestamp-time { font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; color: #0f172a; }
+        .record-count { font-size: 14px; color: #94a3b8; margin-top: 10px; }
+        .emoji { font-size: 24px; }
 
-        .timestamp-item.empty {
-            color: #aaa;
-            border-left-color: #ddd;
-            justify-content: center;
-        }
-
-        .timestamp-number {
-            font-weight: 600;
-            color: #17a2b8;
-        }
-
-        .timestamp-time {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .record-count {
-            font-size: 14px;
-            color: #999;
-            margin-top: 10px;
-        }
-
-        .emoji {
-            font-size: 24px;
-        }
+        /* [푸터 스타일] */
+        .ig-footer { padding: 0 12px 20px; }
+        .ig-footer__sns { display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .ig-sns { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; text-decoration: none; background: #ffffff; border: 1px solid #e2e8f0; transition: transform .12s ease, box-shadow .12s ease; color: #94a3b8; }
+        .ig-sns:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15, 23, 42, .08); }
+        .ig-sns svg { width: 20px; height: 20px; fill: currentColor; stroke: currentColor; }
+        .ig-sns--instagram:hover { color: #E1306C; border-color: currentColor; }
+        .ig-sns--naver:hover { color: #03C75A; border-color: #03C75A; }
+        .ig-footer__info { margin: 12px 0 10px; display: grid; gap: 6px; color: #64748b; font-size: 12.5px; line-height: 1.35; text-align: center; }
+        .ig-footer__info p { margin: 0; }
+        .ig-footer__info a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+        .ig-footer__copyright { margin: 0; font-size: 12.5px; color: #94a3b8; text-align: center; }
 
         @media (max-width: 480px) {
-            .container {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            .timer-display {
-                font-size: 50px;
-            }
-
-            .btn {
-                padding: 15px;
-                font-size: 16px;
-            }
-
-            .timer-buttons {
-                flex-wrap: wrap;
-            }
-
-            .timer-buttons .btn {
-                flex: 1 1 45%;
-            }
+            .white-box { padding: 25px; }
+            h1 { font-size: 22px; }
+            .timer-display { font-size: 48px; }
+            .timer-buttons { flex-wrap: wrap; }
+            .timer-buttons .btn { flex: 1 1 45%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 메인 화면 -->
-        <div id="main-screen" class="screen active">
-            <h1>한완기 실전편</h1>
-            <a href="http://drive.google.com/file/d/1u-6icrLICmVj5mGsHhWkVqshLVGF8mYm/view?usp=drive_link" target="_blank" class="btn btn-image">
-                단계별 전략 수립
-            </a>
-            <button class="btn btn-timer" onclick="showScreen('timer')">
-                <span class="emoji">⏱️</span>
-                100분 타이머
-            </button>
-        </div>
+        <img src="https://cdn.imweb.me/thumbnail/20251022/5f0f79023d456.png" alt="INTEGRATE" class="main-logo">
 
-        <!-- 타이머 화면 -->
-        <div id="timer-screen" class="screen">
-            <h1>⏱️ 100분 타이머</h1>
-            <p class="timer-hint">💡 시험 시작 전에 먼저 [시작], [기록] 버튼을 눌러서 테스트해보세요</p>
-            <p class="timer-label">경과 시간</p>
-            <div class="timer-display" id="timer-display">00:00</div>
-            <div class="timer-buttons">
-                <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">
-                    ▶ 시작
+        <div class="white-box">
+            
+            <div id="main-screen" class="screen active">
+                <h1>한완기 실전편</h1>
+                <button class="btn btn-menu" onclick="showScreen('image')">
+                    단계별 전략 수립
                 </button>
-                <button class="btn btn-record" id="record-btn" onclick="recordTimestamp()">
-                    📌 기록
-                </button>
-                <button class="btn btn-reset" onclick="resetTimer()">
-                    ↺ 리셋
+                <button class="btn btn-menu" onclick="showScreen('timer')">
+                    <span class="emoji">⏱️</span>
+                    100분 타이머
                 </button>
             </div>
 
-            <!-- 타임스탬프 기록 영역 -->
-            <div class="timestamp-section">
-                <p class="timestamp-title">📋 기록된 타임스탬프</p>
-                <div class="timestamp-list" id="timestamp-list">
-                    <div class="timestamp-item empty">기록 없음</div>
+            <div id="image-screen" class="screen">
+                <h1>단계별 전략 수립</h1>
+                <p class="zoom-hint">🔍 두 손가락으로 페이지 전체를 확대/축소할 수 있어요</p>
+                <div class="image-container">
+                    <img src="단계별 전략_v2.png" alt="단계별 전략">
+                    <button class="btn btn-back" onclick="goBackToMain()">
+                        ← 뒤로 가기
+                    </button>
                 </div>
-                <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
             </div>
 
-            <button class="btn btn-back" onclick="goBackFromTimer()">
-                ← 뒤로 가기
-            </button>
-        </div>
-    </div>
+            <div id="timer-screen" class="screen">
+                <h1>⏱️ 100분 타이머</h1>
+                <p class="timer-hint">💡 시험 시작 전에 먼저 [시작], [기록] 버튼을 눌러서 테스트해보세요</p>
+                <p class="timer-label">경과 시간</p>
+                <div class="timer-display" id="timer-display">00:00</div>
+                <div class="timer-buttons">
+                    <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">
+                        ▶ 시작
+                    </button>
+                    <button class="btn btn-record" id="record-btn" onclick="recordTimestamp()">
+                        📌 기록
+                    </button>
+                    <button class="btn btn-reset" onclick="resetTimer()">
+                        ↺ 리셋
+                    </button>
+                </div>
 
-    <!-- 전체화면 이미지 뷰어 -->
-    <div id="fullscreen-viewer" class="fullscreen-viewer">
-        <button class="close-btn" onclick="closeViewer()">✕</button>
-        <div class="fullscreen-image-container">
-            <img id="fullscreen-image" class="fullscreen-image" src="" alt="확대 이미지">
-        </div>
-        <div class="viewer-hint">두 손가락으로 확대/축소 • 드래그로 이동</div>
+                <div class="timestamp-section">
+                    <p class="timestamp-title">📋 기록된 타임스탬프</p>
+                    <div class="timestamp-list" id="timestamp-list">
+                        <div class="timestamp-item empty">기록 없음</div>
+                    </div>
+                    <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
+                </div>
+                
+                <button class="btn btn-back" onclick="goBackToMain()">
+                    ← 뒤로 가기
+                </button>
+            </div>
+
+        </div> <footer class="ig-footer">
+            <div class="ig-footer__sns">
+                <a href="https://www.instagram.com/lhw_math/" target="_blank" class="ig-sns ig-sns--instagram" id="sns-insta">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17" cy="7" r="1.4" fill="currentColor"></circle></svg>
+                </a>
+                <a href="https://cafe.naver.com/pnmath" target="_blank" class="ig-sns ig-sns--naver" id="sns-naver">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M7.5 17.5V6.5h3.1l3.9 6.6V6.5h3v11h-3.1l-3.9-6.6v6.6h-3z" fill="currentColor"></path></svg>
+                </a>
+            </div>
+            <div class="ig-footer__info">
+                <p>주소 : 서울특별시 강남구 선릉로 608 (삼성동, 선진빌딩 6층)</p>
+                <p>㈜ 인터그레이트 | 대표이사: 이해원</p>
+                <p>사업자등록번호: 401-87-02099</p>
+                <p>이메일: <a href="mailto:info@integrate.kr">info@integrate.kr</a></p>
+            </div>
+            <p class="ig-footer__copyright">Copyright © 2025 ㈜ 인터그레이트 All rights reserved.</p>
+        </footer>
     </div>
 
     <script>
-        // 타이머 관련 변수 (개선된 방식)
+        // [타이머 기능 스크립트 - 기존 로직 유지]
         const maxTime = 100 * 60;
         let timerInterval = null;
         let isRunning = false;
-        let startTime = null;           // 시작한 시각 (timestamp)
-        let pausedElapsed = 0;          // 일시정지 전까지 경과한 시간
+        let startTime = null;
+        let pausedElapsed = 0;
+        let timerEnded = false;
 
-        // 타임스탬프 관련 변수
         const maxRecords = 4;
         let timestamps = [];
         const recordLabels = ['1회독 단계', '2회독 단계', '검토/마무리', '풀이 종료'];
-
-        // 현재 화면 상태
         let currentScreen = 'main';
-
-        // 핀치 줌 관련 변수
-        let scale = 1;
-        let posX = 0;
-        let posY = 0;
-        let lastScale = 1;
-        let startDistance = 0;
-        let startX = 0;
-        let startY = 0;
-        let isDragging = false;
 
         function showScreen(screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screen + '-screen').classList.add('active');
             currentScreen = screen;
-            
             if (screen !== 'main') {
                 history.pushState({ screen: screen }, '', '');
             }
@@ -418,50 +263,48 @@
             return mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
         }
 
-        // 현재 경과 시간 계산 (정확한 방식)
         function getElapsedTime() {
-            if (!isRunning) {
-                return pausedElapsed;
-            }
-            return pausedElapsed + Math.floor((Date.now() - startTime) / 1000);
+            if (!isRunning || !startTime) return pausedElapsed;
+            const now = Date.now();
+            const elapsed = pausedElapsed + Math.floor((now - startTime) / 1000);
+            return Math.min(elapsed, maxTime);
         }
 
         function updateDisplay() {
             const elapsed = getElapsedTime();
             document.getElementById('timer-display').textContent = formatTime(elapsed);
+            
+            if (elapsed >= maxTime && isRunning && !timerEnded) {
+                timerEnded = true;
+                clearInterval(timerInterval);
+                pausedElapsed = maxTime;
+                isRunning = false;
+                const btn = document.getElementById('start-btn');
+                btn.textContent = '▶ 시작';
+                btn.className = 'btn btn-start'; // 클래스 이름 주의
+                alert('🔔 시험시간이 종료되었습니다.');
+            }
         }
 
         function toggleTimer() {
             const btn = document.getElementById('start-btn');
-            
             if (isRunning) {
-                // 일시정지
                 clearInterval(timerInterval);
-                pausedElapsed = getElapsedTime();  // 현재까지 경과 시간 저장
+                pausedElapsed = getElapsedTime();
+                startTime = null;
                 isRunning = false;
                 btn.textContent = '▶ 시작';
                 btn.className = 'btn btn-start';
             } else {
-                // 시작
                 if (getElapsedTime() < maxTime) {
-                    startTime = Date.now();  // 현재 시각 저장
+                    startTime = Date.now();
                     isRunning = true;
+                    timerEnded = false;
                     btn.textContent = '⏸ 일시정지';
                     btn.className = 'btn btn-pause';
-                    
-                    timerInterval = setInterval(() => {
-                        const elapsed = getElapsedTime();
-                        updateDisplay();
-                        
-                        if (elapsed >= maxTime) {
-                            clearInterval(timerInterval);
-                            pausedElapsed = maxTime;
-                            isRunning = false;
-                            btn.textContent = '▶ 시작';
-                            btn.className = 'btn btn-start';
-                            alert('🔔 시험시간이 종료되었습니다.');
-                        }
-                    }, 500);  // 더 자주 업데이트해서 정확도 향상
+                    if (timerInterval) clearInterval(timerInterval);
+                    timerInterval = setInterval(updateDisplay, 500);
+                    updateDisplay();
                 }
             }
         }
@@ -471,7 +314,6 @@
                 alert('모든 단계가 기록되었습니다.');
                 return;
             }
-            
             const elapsed = getElapsedTime();
             if (!isRunning && elapsed === 0) {
                 alert('타이머를 먼저 시작해주세요.');
@@ -496,199 +338,58 @@
                     </div>
                 `).join('');
             }
-            
             const remaining = maxRecords - timestamps.length;
             countElement.textContent = `남은 기록 횟수: ${remaining}회`;
-            
-            if (remaining === 0) {
-                recordBtn.disabled = true;
-            } else {
-                recordBtn.disabled = false;
-            }
+            if (remaining === 0) recordBtn.disabled = true;
+            else recordBtn.disabled = false;
         }
 
         function resetTimer() {
             clearInterval(timerInterval);
+            timerInterval = null;
             isRunning = false;
             startTime = null;
             pausedElapsed = 0;
+            timerEnded = false;
             timestamps = [];
             updateDisplay();
             updateTimestampDisplay();
-            
             const btn = document.getElementById('start-btn');
             btn.textContent = '▶ 시작';
             btn.className = 'btn btn-start';
-            
             document.getElementById('record-btn').disabled = false;
         }
 
-        function goBackFromTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            startTime = null;
-            pausedElapsed = 0;
-            timestamps = [];
-            updateDisplay();
-            updateTimestampDisplay();
-            
-            const btn = document.getElementById('start-btn');
-            btn.textContent = '▶ 시작';
-            btn.className = 'btn btn-start';
-            
-            document.getElementById('record-btn').disabled = false;
-            
+        function goBackToMain() {
+            if (currentScreen === 'timer') resetTimer();
             currentScreen = 'main';
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('main-screen').classList.add('active');
         }
 
-        function goBackFromImage() {
-            currentScreen = 'main';
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('main-screen').classList.add('active');
-        }
-
-        // 페이지가 다시 보일 때 화면 업데이트 (백그라운드에서 돌아왔을 때)
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && isRunning) {
-                updateDisplay();
-            }
-        });
-
-        // 전체화면 뷰어 열기
-        function openViewer() {
-            const viewer = document.getElementById('fullscreen-viewer');
-            const fullscreenImg = document.getElementById('fullscreen-image');
-            const originalImg = document.querySelector('.image-container img');
-            
-            fullscreenImg.src = originalImg.src;
-            viewer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            scale = 1;
-            posX = 0;
-            posY = 0;
-            updateTransform();
-        }
-
-        // 전체화면 뷰어 닫기
-        function closeViewer() {
-            const viewer = document.getElementById('fullscreen-viewer');
-            viewer.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            
-            scale = 1;
-            posX = 0;
-            posY = 0;
-        }
-
-        // 이미지 변환 적용
-        function updateTransform() {
-            const img = document.getElementById('fullscreen-image');
-            img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-        }
-
-        // 두 손가락 사이 거리 계산
-        function getDistance(touches) {
-            const dx = touches[0].clientX - touches[1].clientX;
-            const dy = touches[0].clientY - touches[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        // 터치 이벤트 설정
-        const viewer = document.getElementById('fullscreen-viewer');
-
-        viewer.addEventListener('touchstart', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                startDistance = getDistance(e.touches);
-                lastScale = scale;
-            } else if (e.touches.length === 1) {
-                startX = e.touches[0].clientX - posX;
-                startY = e.touches[0].clientY - posY;
-                isDragging = true;
-            }
-        }, { passive: false });
-
-        viewer.addEventListener('touchmove', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const currentDistance = getDistance(e.touches);
-                scale = Math.min(Math.max(lastScale * (currentDistance / startDistance), 1), 5);
-                updateTransform();
-            } else if (e.touches.length === 1 && isDragging && scale > 1) {
-                e.preventDefault();
-                posX = e.touches[0].clientX - startX;
-                posY = e.touches[0].clientY - startY;
-                updateTransform();
-            }
-        }, { passive: false });
-
-        viewer.addEventListener('touchend', function(e) {
-            isDragging = false;
-            lastScale = scale;
-            
-            if (scale <= 1) {
-                scale = 1;
-                posX = 0;
-                posY = 0;
-                updateTransform();
-            }
-        });
-
-        // 더블탭으로 확대/축소
-        let lastTap = 0;
-        viewer.addEventListener('touchend', function(e) {
-            if (e.target === document.querySelector('.close-btn')) return;
-            
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-                if (scale > 1) {
-                    scale = 1;
-                    posX = 0;
-                    posY = 0;
-                } else {
-                    scale = 2.5;
-                }
-                updateTransform();
-                lastScale = scale;
-            }
-            lastTap = currentTime;
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeViewer();
-            }
-        });
-
-        viewer.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            scale = Math.min(Math.max(scale * delta, 1), 5);
-            updateTransform();
-            lastScale = scale;
-        }, { passive: false });
-
-        // 브라우저/핸드폰 뒤로가기 버튼 지원
-        window.addEventListener('popstate', function(e) {
-            if (currentScreen === 'timer') {
-                goBackFromTimer();
-            } else if (currentScreen === 'image') {
-                goBackFromImage();
-            }
-        });
-
-        // 페이지 로드 시 초기 히스토리 상태 설정
+        function handlePageResume() { if (isRunning) updateDisplay(); }
+        document.addEventListener('visibilitychange', function() { if (!document.hidden) handlePageResume(); });
+        window.addEventListener('focus', handlePageResume);
+        window.addEventListener('pageshow', handlePageResume);
+        window.addEventListener('popstate', function(e) { goBackToMain(); });
         history.replaceState({ screen: 'main' }, '', '');
+
+        // [모바일 앱 연동 스크립트 추가]
+        document.addEventListener("DOMContentLoaded", function() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                const instaBtn = document.getElementById('sns-insta');
+                if(instaBtn) {
+                    instaBtn.removeAttribute("target");
+                    instaBtn.href = "instagram://user?username=lhw_math";
+                }
+                const naverBtn = document.getElementById('sns-naver');
+                if(naverBtn) {
+                    naverBtn.removeAttribute("target");
+                    naverBtn.href = "navercafe://cafe?cafeId=23380319";
+                }
+            }
+        });
     </script>
 </body>
 </html>
