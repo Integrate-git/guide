@@ -23,13 +23,51 @@
         h1 { color: #0f172a; margin-bottom: 30px; font-size: 28px; font-weight: bold; }
         
         /* 버튼 기본 스타일 */
-        .btn { width: 100%; padding: 18px; font-size: 18px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; }
+        .btn { 
+            width: 100%; 
+            padding: 18px; 
+            font-size: 18px; 
+            font-weight: 600; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            margin-bottom: 15px; /* 버튼 간 간격 추가 */
+        }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
         .btn:active { transform: translateY(0); }
         
-        /* 한눈에 보는 등급컷 버튼 */
-        .btn-grade { background: #60a5fa; color: white; }
-        .btn-grade:hover { background: #3b82f6; box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6); }
+        .btn-blue { 
+            background: #60a5fa; 
+            color: white; 
+        }
+        .btn-blue:hover { 
+            background: #3b82f6; 
+            box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6); 
+        }
+
+        .btn-green { 
+            background: #86efac;
+            color: white; 
+        }
+        .btn-green:hover { 
+            background: #4ade80;
+            box-shadow: 0 8px 25px rgba(134, 239, 172, 0.6); 
+        }
+
+        .btn-yellow { 
+            background: #fbbf24;
+            color: white; 
+        }
+        .btn-yellow:hover { 
+            background: #f59e0b;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.6); 
+        }
         
         .emoji { font-size: 24px; }
         
@@ -54,7 +92,15 @@
         <div class="white-box">
             <h1>한완기 실전편 가이드</h1>
             
-            <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170007068&t=board" target="_blank" class="btn btn-grade">
+            <a href="https://integrate.imweb.me/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170013670&t=board" target="_blank" class="btn btn-blue">
+                분석페이지 가이드
+            </a>
+
+            <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170014475&t=board" target="_blank" class="btn btn-green">
+                복습노트 활용법
+            </a>
+
+            <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170007068&t=board" target="_blank" class="btn btn-yellow">
                 한눈에 보는 등급컷 활용법
             </a>
         </div>
