@@ -17,23 +17,18 @@
             mix-blend-mode: multiply; 
         }
 
-        /* 박스 스타일 */
         .white-box { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10); border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        
         h1 { color: #0f172a; margin-bottom: 30px; font-size: 28px; font-weight: bold; }
         
-        /* 버튼 기본 스타일 */
         .btn { width: 100%; padding: 18px; font-size: 18px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
         .btn:active { transform: translateY(0); }
         
-        /* 한눈에 보는 등급컷 버튼 */
         .btn-grade { background: #60a5fa; color: white; }
         .btn-grade:hover { background: #3b82f6; box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6); }
         
         .emoji { font-size: 24px; }
         
-        /* 푸터 스타일 */
         .ig-footer { padding: 0 12px 20px; }
         .ig-footer__sns { display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 15px; }
         .ig-sns { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; text-decoration: none; background: #ffffff; border: 1px solid #e2e8f0; transition: transform .12s ease, box-shadow .12s ease; color: #94a3b8; }
@@ -53,7 +48,6 @@
         
         <div class="white-box">
             <h1>한완기 실전편</h1>
-            
             <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170007068&t=board" target="_blank" class="btn btn-grade">
                 한눈에 보는 등급컷
             </a>
@@ -80,29 +74,24 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 접속한 기기가 모바일 여부 확인
+            // 모바일 기기 감지
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // 모바일이라면 -> 앱 실행 주소(Deep Link)로 변경
-                
-                // 1. 인스타그램 앱으로 연결
+                // 1. 인스타그램 앱 연결
                 const instaBtn = document.getElementById('sns-insta');
                 if(instaBtn) {
-                    // instagram://user?username=아이디
+                    instaBtn.removeAttribute("target");
                     instaBtn.href = "instagram://user?username=lhw_math";
-                    instaBtn.removeAttribute("target"); // 새창 띄우기 속성 제거
                 }
 
-                // 2. 네이버 카페 앱으로 연결
+                // 2. 네이버 카페 앱 연결
                 const naverBtn = document.getElementById('sns-naver');
                 if(naverBtn) {
-                    // navercafe://cafe?cafeUrl=카페URL뒷부분
-                    naverBtn.href = "navercafe://cafe?cafeUrl=pnmath";
-                    naverBtn.removeAttribute("target"); // 새창 띄우기 속성 제거
+                    naverBtn.removeAttribute("target");
+                    naverBtn.href = "navercafe://cafe?cafeId=23380319";
                 }
             }
-            // PC인 경우 웹사이트 새창 열기
         });
     </script>
 </body>
