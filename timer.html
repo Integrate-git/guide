@@ -14,7 +14,9 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            padding: 20px; 
+            padding: 20px;
+            /* 화면 흔들림 방지 */
+            touch-action: pan-y;
         }
         
         .container { max-width: 600px; width: 100%; text-align: center; }
@@ -60,6 +62,8 @@
             gap: 12px; 
             text-decoration: none; 
             margin-bottom: 15px;
+            /* 버튼 위에서 더블탭 확대 방지 */
+            touch-action: manipulation;
         }
         .btn:hover { 
             transform: translateY(-2px); 
@@ -180,7 +184,6 @@
 
             <div id="image-screen" class="screen">
                 <h1>단계별 전략 수립</h1>
-                <p class="zoom-hint">🔍 두 손가락으로 페이지 전체를 확대/축소할 수 있어요</p>
                 <div class="image-container">
                     <img src="단계별_전략.png" alt="단계별 전략">
                     <button class="btn btn-back" onclick="goBackToMain()">
@@ -219,7 +222,9 @@
                 </button>
             </div>
 
-        </div> <footer class="ig-footer">
+        </div> 
+        
+        <footer class="ig-footer">
             <div class="ig-footer__sns">
                 <a href="https://www.instagram.com/lhw_math/" target="_blank" class="ig-sns ig-sns--instagram" id="sns-insta">
                     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17" cy="7" r="1.4" fill="currentColor"></circle></svg>
@@ -239,7 +244,41 @@
     </div>
 
     <script>
-        // [타이머 및 앱 연동 스크립트 (기존 기능 유지)]
+        // ==========================================
+        // [1] 줌(확대) 제어 로직 (여기가 추가된 핵심!)
+        // ==========================================
+        
+        // 현재 화면이 'image'일 때만 true 반환
+        function isZoomAllowed() {
+            return currentScreen === 'image';
+        }
+
+        // 핀치 줌(손가락 두 개) 감지 시 차단하는 함수
+        function blockZoomGesture(e) {
+            // 이미지 화면이면 줌을 허용(함수 종료)
+            if (isZoomAllowed()) return;
+
+            // 손가락이 2개 이상(핀치 줌)이면 차단(preventDefault)
+            if (e.touches && e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }
+
+        // 터치 이벤트 리스너 등록
+        document.addEventListener('touchmove', blockZoomGesture, { passive: false });
+        document.addEventListener('touchstart', blockZoomGesture, { passive: false });
+
+        // iOS Safari 전용 제스처 이벤트 차단
+        document.addEventListener('gesturestart', function(e) {
+            if (!isZoomAllowed()) e.preventDefault();
+        });
+        document.addEventListener('gesturechange', function(e) {
+            if (!isZoomAllowed()) e.preventDefault();
+        });
+
+        // ==========================================
+        // [2] 기존 타이머 및 앱 연동 로직
+        // ==========================================
         const maxTime = 100 * 60;
         let timerInterval = null;
         let isRunning = false;
