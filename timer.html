@@ -47,7 +47,7 @@
             font-weight: bold; 
         }
 
-        /* [버튼] */
+        /* [버튼 공통 스타일] */
         .btn { 
             width: 100%; 
             padding: 18px; 
@@ -56,30 +56,38 @@
             border: none; 
             border-radius: 12px; 
             cursor: pointer; 
-            transition: transform 0.2s, box-shadow 0.2s; 
+            transition: all 0.2s ease; /* 모든 효과 부드럽게 */
             display: flex; 
             align-items: center; 
             justify-content: center; 
             gap: 12px; 
             text-decoration: none; 
             margin-bottom: 15px;
-            /* 버튼 위에서도 기본적인 터치 동작 허용 */
             touch-action: manipulation;
         }
+        
         .btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+            transform: translateY(-3px); /* 위로 살짝 뜸 */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* 그림자 강화 */
+            filter: brightness(1.1); /* 색상을 약간 더 화사하게 만듦 */
         }
-        .btn:active { transform: translateY(0); }
+        .btn:active { transform: translateY(0); filter: brightness(1.0); }
 
-        /* 버튼 색상 */
-        .btn-image { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-timer { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .btn-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        
+        .btn-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+
+        .btn-mint { 
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+            color: white; 
+        }
+
+        /* [타이머 조작 버튼] */
         .btn-start { background: #28a745; color: white; flex: 1; margin-bottom: 0; }
         .btn-pause { background: #ffc107; color: #333; flex: 1; margin-bottom: 0; }
         .btn-reset { background: #dc3545; color: white; flex: 1; margin-bottom: 0; }
         .btn-record { background: #17a2b8; color: white; flex: 1; margin-bottom: 0; }
-        .btn-record:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-record:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; filter: none; }
         .btn-back { background: #6c757d; color: white; margin-top: 20px; }
 
         /* 화면 전환 */
@@ -154,10 +162,13 @@
             
             <div id="main-screen" class="screen active">
                 <h1>한완기 실전편</h1>
-                <button class="btn btn-image" onclick="showScreen('image')">
+                <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170013700&t=board" target="_blank" class="btn btn-purple">
+                    타임라인 가이드
+                </a>
+                <button class="btn btn-pink" onclick="showScreen('image')">
                     단계별 전략 수립
                 </button>
-                <button class="btn btn-timer" onclick="showScreen('timer')">
+                <button class="btn btn-mint" onclick="showScreen('timer')">
                     <span class="emoji">⏱️</span>
                     100분 타이머
                 </button>
@@ -228,21 +239,17 @@
         // ==========================================
         // 화면별 줌 제어
         // ==========================================
-        
-        // 줌 설정을 강제로 변경하는 함수
         function setZoomEnabled(enabled) {
             const viewport = document.getElementById('viewport-meta');
             if (enabled) {
-                // 이미지 화면: 5배까지 확대 허용
                 viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
             } else {
-                // 다른 화면: 확대 차단
                 viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
             }
         }
 
         // ==========================================
-        // 기존 기능 (타이머, 화면 전환, 앱 연동)
+        // 기존 기능
         // ==========================================
         const maxTime = 100 * 60;
         let timerInterval = null;
@@ -257,16 +264,14 @@
         let currentScreen = 'main';
 
         function showScreen(screen) {
-            // 화면 전환 로직
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screen + '-screen').classList.add('active');
             currentScreen = screen;
 
-            // 화면 전환 시 줌 설정 적용
             if (screen === 'image') {
-                setZoomEnabled(true);  // 이미지 화면은 줌 ON
+                setZoomEnabled(true);
             } else {
-                setZoomEnabled(false); // 나머지는 줌 OFF
+                setZoomEnabled(false);
             }
 
             if (screen !== 'main') {
@@ -274,7 +279,6 @@
             }
         }
 
-        // [이하 타이머 및 기타 기능 로직 동일]
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
@@ -381,8 +385,7 @@
         function goBackToMain() {
             if (currentScreen === 'timer') resetTimer();
             currentScreen = 'main';
-            // 메인으로 돌아갈 때도 줌 끄기 적용
-            showScreen('main'); // showScreen 함수 내에서 줌 설정 처리됨
+            showScreen('main');
         }
 
         function handlePageResume() { if (isRunning) updateDisplay(); }
