@@ -2,10 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>한완기 실전편 전략 수립</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             background: #eef2f7;
@@ -15,6 +16,8 @@
             align-items: center; 
             justify-content: center; 
             padding: 20px;
+            touch-action: manipulation; 
+            -webkit-text-size-adjust: 100%;
         }
         
         .container { max-width: 600px; width: 100%; text-align: center; }
@@ -60,7 +63,8 @@
             gap: 12px; 
             text-decoration: none; 
             margin-bottom: 15px;
-            touch-action: manipulation; /* 버튼 더블탭 확대 방지 */
+            /* 버튼 위에서도 기본적인 터치 동작 허용 */
+            touch-action: manipulation;
         }
         .btn:hover { 
             transform: translateY(-2px); 
@@ -221,26 +225,21 @@
     </div>
 
     <script>
-        function blockZoomGesture(e) {
-            if (currentScreen === 'image') return; // 이미지 화면이면 줌 허용
-
-            if (e.touches && e.touches.length > 1) {
-                e.preventDefault();
+        // ==========================================
+        // 화면별 줌 제어
+        // ==========================================
+        
+        // 줌 설정을 강제로 변경하는 함수
+        function setZoomEnabled(enabled) {
+            const viewport = document.getElementById('viewport-meta');
+            if (enabled) {
+                // 이미지 화면: 5배까지 확대 허용
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            } else {
+                // 다른 화면: 확대 차단
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
             }
         }
-
-        // passive: false 옵션이 있어야 preventDefault()가 작동합니다.
-        document.addEventListener('touchmove', blockZoomGesture, { passive: false });
-        document.addEventListener('touchstart', blockZoomGesture, { passive: false });
-
-        // iOS Safari 제스처 이벤트 차단
-        document.addEventListener('gesturestart', function(e) {
-            if (currentScreen !== 'image') e.preventDefault();
-        });
-        document.addEventListener('gesturechange', function(e) {
-            if (currentScreen !== 'image') e.preventDefault();
-        });
-
 
         // ==========================================
         // 기존 기능 (타이머, 화면 전환, 앱 연동)
@@ -258,14 +257,24 @@
         let currentScreen = 'main';
 
         function showScreen(screen) {
+            // 화면 전환 로직
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screen + '-screen').classList.add('active');
             currentScreen = screen;
+
+            // 화면 전환 시 줌 설정 적용
+            if (screen === 'image') {
+                setZoomEnabled(true);  // 이미지 화면은 줌 ON
+            } else {
+                setZoomEnabled(false); // 나머지는 줌 OFF
+            }
+
             if (screen !== 'main') {
                 history.pushState({ screen: screen }, '', '');
             }
         }
 
+        // [이하 타이머 및 기타 기능 로직 동일]
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
@@ -372,8 +381,8 @@
         function goBackToMain() {
             if (currentScreen === 'timer') resetTimer();
             currentScreen = 'main';
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('main-screen').classList.add('active');
+            // 메인으로 돌아갈 때도 줌 끄기 적용
+            showScreen('main'); // showScreen 함수 내에서 줌 설정 처리됨
         }
 
         function handlePageResume() { if (isRunning) updateDisplay(); }
