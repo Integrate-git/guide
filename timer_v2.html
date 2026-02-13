@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>한완기 실전편 - 전략 수립</title>
+    <title>한완기 실전편 전략 수립</title>
     <style>
-        /* [공통] link.html의 기본 스타일 적용 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: #eef2f7; 
+            background: #eef2f7;
             color: #0f172a; 
             min-height: 100vh; 
             display: flex; 
@@ -18,7 +17,6 @@
             padding: 20px; 
         }
         
-        /* 컨테이너 너비를 link.html 기준(600px)으로 맞춤 */
         .container { max-width: 600px; width: 100%; text-align: center; }
 
         /* [로고] 상단 로고 스타일 */
@@ -26,7 +24,7 @@
             width: 220px;
             height: auto;
             margin-bottom: 30px;
-            mix-blend-mode: multiply; /* 배경 투명화 트릭 */
+            mix-blend-mode: multiply;
         }
 
         /* [박스] 화이트 박스 스타일 */
@@ -46,7 +44,7 @@
             font-weight: bold; 
         }
 
-        /* [버튼] 기본 스타일 (link.html 스타일) */
+        /* [버튼] */
         .btn { 
             width: 100%; 
             padding: 18px; 
@@ -61,7 +59,7 @@
             justify-content: center; 
             gap: 12px; 
             text-decoration: none; 
-            margin-bottom: 15px; /* 버튼 간 간격 추가 */
+            margin-bottom: 15px;
         }
         .btn:hover { 
             transform: translateY(-2px); 
@@ -69,38 +67,45 @@
         }
         .btn:active { transform: translateY(0); }
 
-        /* 메인 메뉴 버튼 (파란색 통일) */
-        .btn-menu { background: #60a5fa; color: white; }
-        .btn-menu:hover { background: #3b82f6; box-shadow: 0 8px 25px rgba(96, 165, 250, 0.6); }
+        /* 메인 메뉴 버튼 */
+        .btn-image {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
 
-        /* 뒤로가기 버튼 */
-        .btn-back { background: #94a3b8; color: white; margin-top: 20px; }
-        .btn-back:hover { background: #64748b; }
+        .btn-timer {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
 
-        /* [타이머 기능 버튼] 색상은 유지하되 디자인은 새 테마에 맞춤 */
-        .btn-start { background: #22c55e; color: white; flex: 1; margin-bottom: 0; } /* Green */
-        .btn-pause { background: #fbbf24; color: #0f172a; flex: 1; margin-bottom: 0; } /* Yellow */
-        .btn-reset { background: #ef4444; color: white; flex: 1; margin-bottom: 0; } /* Red */
-        .btn-record { background: #0ea5e9; color: white; flex: 1; margin-bottom: 0; } /* Sky Blue */
+        /* 타이머 조작 버튼 */
+        .btn-start { background: #28a745; color: white; flex: 1; margin-bottom: 0; }
+        .btn-pause { background: #ffc107; color: #333; flex: 1; margin-bottom: 0; }
+        .btn-reset { background: #dc3545; color: white; flex: 1; margin-bottom: 0; }
+        .btn-record { background: #17a2b8; color: white; flex: 1; margin-bottom: 0; }
         
         .btn-record:disabled { 
-            background: #cbd5e1; 
+            background: #ccc; 
             cursor: not-allowed; 
             transform: none; 
             box-shadow: none; 
         }
 
-        /* [화면 전환 로직] */
+        /* 뒤로가기 버튼 */
+        .btn-back { 
+            background: #6c757d; 
+            color: white; 
+            margin-top: 20px; 
+        }
+
+        /* 기능 관련 스타일 */
         .screen { display: none; }
         .screen.active { display: block; }
-
-        /* [이미지 뷰어 스타일] */
         .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
         .zoom-hint { color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
 
-        /* [타이머 디스플레이 스타일] */
         .timer-display {
-            font-size: 64px; /* 모바일 대응을 위해 약간 축소 */
+            font-size: 64px;
             font-weight: bold;
             color: #0f172a;
             font-family: 'Courier New', monospace;
@@ -113,10 +118,9 @@
         .timer-buttons { display: flex; gap: 10px; margin-bottom: 10px; }
         .timer-buttons .btn { padding: 14px; font-size: 16px; }
 
-        /* [타임스탬프 기록 영역 스타일] */
         .timestamp-section {
             margin-top: 20px; padding: 15px; 
-            background: #f8fafc; /* 아주 연한 회색 */
+            background: #f8fafc; 
             border-radius: 12px;
             border: 1px solid #e2e8f0;
         }
@@ -126,11 +130,11 @@
         .timestamp-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 15px; background: white; border-radius: 8px;
-            border-left: 4px solid #0ea5e9;
+            border-left: 4px solid #17a2b8; /* 기록 색상도 원복 */
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .timestamp-item.empty { color: #94a3b8; border-left-color: #cbd5e1; justify-content: center; }
-        .timestamp-number { font-weight: 600; color: #0ea5e9; }
+        .timestamp-number { font-weight: 600; color: #17a2b8; }
         .timestamp-time { font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; color: #0f172a; }
         .record-count { font-size: 14px; color: #94a3b8; margin-top: 10px; }
         .emoji { font-size: 24px; }
@@ -165,10 +169,10 @@
             
             <div id="main-screen" class="screen active">
                 <h1>한완기 실전편</h1>
-                <button class="btn btn-menu" onclick="showScreen('image')">
+                <button class="btn btn-image" onclick="showScreen('image')">
                     단계별 전략 수립
                 </button>
-                <button class="btn btn-menu" onclick="showScreen('timer')">
+                <button class="btn btn-timer" onclick="showScreen('timer')">
                     <span class="emoji">⏱️</span>
                     100분 타이머
                 </button>
@@ -235,7 +239,7 @@
     </div>
 
     <script>
-        // [타이머 기능 스크립트 - 기존 로직 유지]
+        // [타이머 및 앱 연동 스크립트 (기존 기능 유지)]
         const maxTime = 100 * 60;
         let timerInterval = null;
         let isRunning = false;
@@ -281,7 +285,7 @@
                 isRunning = false;
                 const btn = document.getElementById('start-btn');
                 btn.textContent = '▶ 시작';
-                btn.className = 'btn btn-start'; // 클래스 이름 주의
+                btn.className = 'btn btn-start'; 
                 alert('🔔 시험시간이 종료되었습니다.');
             }
         }
@@ -374,7 +378,6 @@
         window.addEventListener('popstate', function(e) { goBackToMain(); });
         history.replaceState({ screen: 'main' }, '', '');
 
-        // [모바일 앱 연동 스크립트 추가]
         document.addEventListener("DOMContentLoaded", function() {
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             if (isMobile) {
