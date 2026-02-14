@@ -17,6 +17,9 @@
             --book-bg: #e2e8f0;
             --theme-btn-bg: #ffffff;
             --theme-btn-text: #0f172a;
+            /* 타이머 기본 색상 변수 (스크립트에서 변경됨) */
+            --timer-color: #10b981; 
+            --timer-glow: rgba(16, 185, 129, 0.2);
         }
 
         body.dark-mode {
@@ -84,13 +87,11 @@
             margin-top: 40px;
             margin-bottom: 20px;
             transition: all 0.4s;
-            mix-blend-mode: multiply; /* 라이트모드에서 흰 배경 투명화 */
+            mix-blend-mode: multiply; 
         }
-        
-        /* 다크모드 로고 처리 (완전한 투명화 + 색상 반전) */
         body.dark-mode .main-logo {
-            filter: invert(1) hue-rotate(180deg); /* 색상 반전 */
-            mix-blend-mode: screen; /* 검은색 배경 투명화 (완벽한 누끼 효과) */
+            filter: invert(1) hue-rotate(180deg); 
+            mix-blend-mode: screen; 
         }
 
         /* 📖 [3D 책장 넘기기 (Flip) 컨테이너] */
@@ -101,10 +102,9 @@
             display: block; 
         }
         
-        /* 🛠️ 박스 크기 자동 조절 (CSS Grid 활용) */
         .card {
             width: 100%;
-            display: grid; /* Grid를 사용해 앞/뒷면을 완벽히 겹치게 함 */
+            display: grid; 
             transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
             transform-style: preserve-3d;
         }
@@ -114,7 +114,7 @@
         }
 
         .card__face {
-            grid-area: 1 / 1; /* 앞뒷면을 같은 위치에 겹치게 배치 (가장 높은 쪽에 크기 맞춰짐) */
+            grid-area: 1 / 1; 
             backface-visibility: hidden;
             background: var(--box-bg); 
             border-radius: 20px; 
@@ -129,18 +129,6 @@
         .card__face--front { transform: rotateY(0deg); }
         .card__face--back { transform: rotateY(180deg); }
 
-        /* [기존 White Box (이미지 스크린용)] */
-        .white-box {
-            background: var(--box-bg); 
-            border-radius: 20px; 
-            padding: 40px; 
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10); 
-            border: 1px solid var(--border-color); 
-            margin-bottom: 30px; 
-            width: 100%;
-            transition: background-color 0.4s;
-        }
-
         h1 { 
             color: var(--text-main); 
             margin-bottom: 30px; 
@@ -151,7 +139,7 @@
         /* [버튼 공통 스타일] */
         .btn { 
             width: 100%; padding: 18px; font-size: 18px; font-weight: 600; 
-            border: 2px solid transparent; /* 다크모드 테두리를 위해 투명 border 미리 추가 */
+            border: 2px solid transparent; 
             border-radius: 12px; cursor: pointer; 
             transition: all 0.2s ease; display: flex; align-items: center; 
             justify-content: center; gap: 12px; text-decoration: none; 
@@ -160,25 +148,22 @@
         .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); filter: brightness(1.1); }
         .btn:active { transform: translateY(0); filter: brightness(1.0); }
 
-        /* 🟢 라이트모드 기본 버튼 색상 */
+        /* 라이트모드 버튼 색상 */
         .btn-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box; color: white; }
         .btn-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) border-box; color: white; }
         .btn-mint { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) border-box; color: white; }
 
-        /* 🌑 다크모드 버튼 색상 (내부는 비우고 테두리만 그라데이션) */
+        /* 다크모드 버튼 색상 */
         body.dark-mode .btn-purple {
-            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box,
-                        linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box, linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
             color: #b592ff; 
         }
         body.dark-mode .btn-pink {
-            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box,
-                        linear-gradient(135deg, #f093fb 0%, #f5576c 100%) border-box;
+            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box, linear-gradient(135deg, #f093fb 0%, #f5576c 100%) border-box;
             color: #fca5bb; 
         }
         body.dark-mode .btn-mint {
-            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box,
-                        linear-gradient(135deg, #11998e 0%, #38ef7d 100%) border-box;
+            background: linear-gradient(var(--box-bg), var(--box-bg)) padding-box, linear-gradient(135deg, #11998e 0%, #38ef7d 100%) border-box;
             color: #6ee7b7; 
         }
 
@@ -191,98 +176,84 @@
         .btn-back { background: var(--border-color); color: var(--text-main); margin-top: 20px; }
 
         /* 📚 [책 표지 버튼 영역] */
-        .book-section-title {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: var(--text-sub);
-            font-weight: bold;
-        }
-        .book-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            width: 100%;
-        }
+        .book-section-title { margin-top: 25px; margin-bottom: 10px; font-size: 14px; color: var(--text-sub); font-weight: bold; }
+        .book-container { display: flex; justify-content: space-between; gap: 12px; width: 100%; }
         .book-link {
-            flex: 1;
-            aspect-ratio: 2 / 3; 
-            border-radius: 8px;
-            background-color: var(--book-bg);
-            color: var(--text-main);
-            text-decoration: none;
+            flex: 1; aspect-ratio: 2 / 3; border-radius: 8px; background-color: var(--book-bg);
+            color: var(--text-main); text-decoration: none; display: flex; align-items: center;
+            justify-content: center; font-size: 13px; font-weight: 600; text-align: center;
+            line-height: 1.4; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden; position: relative;
+        }
+        .book-link:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .book-link img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+
+        /* 이미지 컨테이너 */
+        .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+
+        /* ⏱️ [원형 숨쉬는 타이머 스타일] */
+        .timer-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 20px auto 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            line-height: 1.4;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            overflow: hidden;
-            position: relative;
-        }
-        .book-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-        .book-link img {
-            position: absolute; width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* 화면 전환 (이미지 스크린용) */
-        .screen { display: none; }
-        .screen.active { display: block; width: 100%; }
-        
-        .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+        /* 시간에 따른 색상 변화를 위한 테마 클래스 */
+        .timer-container.theme-mint { --timer-color: #10b981; --timer-glow: rgba(16, 185, 129, 0.25); }
+        .timer-container.theme-yellow { --timer-color: #f59e0b; --timer-glow: rgba(245, 158, 11, 0.25); }
+        .timer-container.theme-red { --timer-color: #ef4444; --timer-glow: rgba(239, 68, 68, 0.3); }
 
-        /* ⏱️ [타이머 스타일 및 애니메이션] */
+        .breathing-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--border-color); /* 기본 테두리 */
+            background: transparent;
+            transition: border-color 0.5s ease; 
+            z-index: 0;
+        }
+
+        .breathing-circle.active {
+            border-color: var(--timer-color); /* 시간에 맞춰 변하는 색상 */
+            animation: breathe-circle 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe-circle {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 transparent; opacity: 1; }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px 10px var(--timer-glow); opacity: 0.8; }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; opacity: 1; }
+        }
+
         .timer-display {
-            font-size: 64px;
+            position: relative;
+            z-index: 1; 
+            font-size: 58px;
             font-weight: bold;
+            color: var(--text-main); /* 기본 글자색 (타이머 시작 전) */
             font-family: 'Courier New', monospace;
-            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(15, 23, 42, 0.08);
             transition: color 1s ease;
         }
-
-        /* ✨ 요청하신 숨쉬는 효과 반영 ✨ */
-        @keyframes breathe {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-        .breathing { 
-            /* 4초 간격으로 무한 반복 */
-            animation: breathe 4s ease-in-out infinite; 
+        
+        /* 타이머 작동 중에만 글자 색상도 동기화 */
+        .timer-container.active-theme .timer-display {
+            color: var(--timer-color);
         }
 
-        /* 시간에 따른 색상 변화 */
-        .color-mint { color: #10b981; }
-        .color-yellow { color: #f59e0b; }
-        .color-red { color: #ef4444; }
-
-        .timer-label { color: var(--text-sub); font-size: 18px; margin-bottom: 5px; }
-        .timer-hint { color: var(--text-sub); font-size: 13px; margin-bottom: 10px; }
+        .timer-label { color: var(--text-sub); font-size: 18px; margin-bottom: 10px; }
+        .timer-hint { color: var(--text-sub); font-size: 13px; margin-bottom: 5px; }
         .timer-buttons { display: flex; gap: 10px; margin-bottom: 10px; }
         .timer-buttons .btn { padding: 14px; font-size: 16px; margin-bottom: 0;}
 
-        .timestamp-section {
-            margin-top: 15px; padding: 15px; 
-            background: var(--timestamp-bg); 
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.4s;
-        }
+        .timestamp-section { margin-top: 15px; padding: 15px; background: var(--timestamp-bg); border-radius: 12px; border: 1px solid var(--border-color); transition: background-color 0.4s; }
         .timestamp-title { font-size: 16px; color: var(--text-sub); margin-bottom: 10px; }
         .timestamp-list { display: flex; flex-direction: column; gap: 8px; }
-        .timestamp-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; background: var(--timestamp-item); border-radius: 8px;
-            border-left: 4px solid #17a2b8;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: background-color 0.4s;
-        }
+        .timestamp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: var(--timestamp-item); border-radius: 8px; border-left: 4px solid #17a2b8; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: background-color 0.4s; }
         .timestamp-item.empty { color: var(--text-sub); border-left-color: var(--border-color); justify-content: center; }
         .timestamp-number { font-weight: 600; color: #17a2b8; }
         .timestamp-time { font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; color: var(--text-main); }
@@ -304,8 +275,8 @@
 
         @media (max-width: 480px) {
             .card__face { padding: 25px; }
-            .white-box { padding: 25px; }
             h1 { font-size: 22px; }
+            .timer-container { width: 240px; height: 240px; }
             .timer-display { font-size: 48px; }
             .timer-buttons { flex-wrap: wrap; }
             .timer-buttons .btn { flex: 1 1 45%; }
@@ -338,54 +309,51 @@
 
                     <p class="book-section-title">추천 교재 (클릭 시 이동)</p>
                     <div class="book-container">
-                        <a href="https://integrate.kr/" target="_blank" class="book-link">
-                            <span>한완수<br>시리즈</span>
-                        </a>
-                        <a href="https://integrate.kr/" target="_blank" class="book-link">
-                            <span>한완기<br>기출편</span>
-                        </a>
-                        <a href="https://integrate.kr/" target="_blank" class="book-link">
-                            <span>한완기<br>실전편</span>
-                        </a>
+                        <a href="https://integrate.kr/" target="_blank" class="book-link"><span>한완수<br>시리즈</span></a>
+                        <a href="https://integrate.kr/" target="_blank" class="book-link"><span>한완기<br>기출편</span></a>
+                        <a href="https://integrate.kr/" target="_blank" class="book-link"><span>한완기<br>실전편</span></a>
                     </div>
                 </div>
 
                 <div class="card__face card__face--back">
-                    <h1>⏱️ 100분 타이머</h1>
-                    <p class="timer-hint">💡 시험 시작 전에 먼저 [시작], [기록] 버튼을 눌러서 테스트해보세요</p>
-                    <p class="timer-label">경과 시간</p>
                     
-                    <div class="timer-display color-mint" id="timer-display">00:00</div>
-                    
-                    <div class="timer-buttons">
-                        <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">▶ 시작</button>
-                        <button class="btn btn-record" id="record-btn" onclick="recordTimestamp()">📌 기록</button>
-                        <button class="btn btn-reset" onclick="resetTimer()">↺ 리셋</button>
-                    </div>
-
-                    <div class="timestamp-section">
-                        <p class="timestamp-title">📋 기록된 타임스탬프</p>
-                        <div class="timestamp-list" id="timestamp-list">
-                            <div class="timestamp-item empty">기록 없음</div>
+                    <div id="view-timer" style="display: none;">
+                        <h1>⏱️ 100분 타이머</h1>
+                        <p class="timer-hint">💡 시험 시작 전에 먼저 [시작], [기록] 버튼을 눌러서 테스트해보세요</p>
+                        <p class="timer-label">경과 시간</p>
+                        
+                        <div class="timer-container theme-mint" id="timer-container">
+                            <div class="breathing-circle" id="breathing-circle"></div>
+                            <div class="timer-display" id="timer-display">00:00</div>
                         </div>
-                        <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
+                        
+                        <div class="timer-buttons">
+                            <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">▶ 시작</button>
+                            <button class="btn btn-record" id="record-btn" onclick="recordTimestamp()">📌 기록</button>
+                            <button class="btn btn-reset" onclick="resetTimer()">↺ 리셋</button>
+                        </div>
+
+                        <div class="timestamp-section">
+                            <p class="timestamp-title">📋 기록된 타임스탬프</p>
+                            <div class="timestamp-list" id="timestamp-list">
+                                <div class="timestamp-item empty">기록 없음</div>
+                            </div>
+                            <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
+                        </div>
+                        
+                        <button class="btn btn-back" onclick="goBackToMain()">← 뒤로 가기</button>
                     </div>
-                    
-                    <button class="btn btn-back" onclick="goBackToMain()">← 뒤로 가기</button>
+
+                    <div id="view-image" style="display: none;">
+                        <h1>단계별 전략 수립</h1>
+                        <div class="image-container">
+                            <img src="단계별_전략.png" alt="단계별 전략">
+                        </div>
+                        <button class="btn btn-back" onclick="goBackToMain()">← 뒤로 가기</button>
+                    </div>
+
                 </div>
 
-            </div>
-        </div>
-
-        <div id="image-screen" class="screen">
-            <div class="white-box">
-                <h1>단계별 전략 수립</h1>
-                <div class="image-container">
-                    <img src="단계별_전략.png" alt="단계별 전략">
-                    <button class="btn btn-back" onclick="goBackToMain()">
-                        ← 뒤로 가기
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -409,14 +377,11 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. 다크모드 토글 기능
-        // ==========================================
+        // 1. 다크모드
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById('themeBtn');
             body.classList.toggle('dark-mode');
-            
             if (body.classList.contains('dark-mode')) {
                 themeBtn.textContent = '☀️ 라이트 모드';
             } else {
@@ -424,9 +389,7 @@
             }
         }
 
-        // ==========================================
-        // 화면별 줌 제어
-        // ==========================================
+        // 2. 줌 제어
         function setZoomEnabled(enabled) {
             const viewport = document.getElementById('viewport-meta');
             if (enabled) {
@@ -436,9 +399,7 @@
             }
         }
 
-        // ==========================================
-        // 타이머 및 화면 전환
-        // ==========================================
+        // 3. 변수 및 화면/타이머 로직
         const maxTime = 100 * 60; // 100분
         let timerInterval = null;
         let isRunning = false;
@@ -451,25 +412,36 @@
         const recordLabels = ['1회독 단계', '2회독 단계', '검토/마무리', '풀이 종료'];
         let currentScreen = 'main';
 
+        // 🔄 화면 전환 (Flip) 로직 개선
         function showScreen(screen) {
             currentScreen = screen;
             setZoomEnabled(screen === 'image');
 
-            const sceneContainer = document.getElementById('scene-container');
             const mainCard = document.getElementById('main-card');
-            const imageScreen = document.getElementById('image-screen');
+            const viewTimer = document.getElementById('view-timer');
+            const viewImage = document.getElementById('view-image');
 
-            if (screen === 'image') {
-                sceneContainer.style.display = 'none';
-                imageScreen.classList.add('active');
-            } else if (screen === 'timer') {
-                imageScreen.classList.remove('active');
-                sceneContainer.style.display = 'block';
-                mainCard.classList.add('is-flipped');
-            } else {
-                imageScreen.classList.remove('active');
-                sceneContainer.style.display = 'block';
+            if (screen === 'main') {
+                // 메인으로 돌아갈 땐 먼저 카드를 뒤집음
                 mainCard.classList.remove('is-flipped');
+                
+                // 뒤집히는 애니메이션 도중에 높이가 확 줄어들지 않도록 시간차를 둠
+                setTimeout(() => {
+                    if (currentScreen === 'main') {
+                        viewTimer.style.display = 'none';
+                        viewImage.style.display = 'none';
+                    }
+                }, 400); // 애니메이션(0.8s)의 절반 대기
+            } else {
+                // 타이머나 이미지로 갈 땐 알맞은 뷰를 먼저 켜고 카드를 뒤집음
+                if (screen === 'timer') {
+                    viewImage.style.display = 'none';
+                    viewTimer.style.display = 'block';
+                } else if (screen === 'image') {
+                    viewTimer.style.display = 'none';
+                    viewImage.style.display = 'block';
+                }
+                mainCard.classList.add('is-flipped');
             }
 
             if (screen !== 'main') {
@@ -490,16 +462,17 @@
             return Math.min(elapsed, maxTime);
         }
 
+        // 🌈 시간에 따른 테마(색상) 변경
         function updateTimerColor(elapsedSeconds) {
-            const display = document.getElementById('timer-display');
-            display.classList.remove('color-mint', 'color-yellow', 'color-red');
+            const container = document.getElementById('timer-container');
+            container.classList.remove('theme-mint', 'theme-yellow', 'theme-red');
 
             if (elapsedSeconds > 5700) { 
-                display.classList.add('color-red');
+                container.classList.add('theme-red');
             } else if (elapsedSeconds > 3000) { 
-                display.classList.add('color-yellow');
+                container.classList.add('theme-yellow');
             } else {
-                display.classList.add('color-mint');
+                container.classList.add('theme-mint');
             }
         }
 
@@ -510,39 +483,54 @@
             
             updateTimerColor(elapsed);
 
+            // 종료 체크
             if (elapsed >= maxTime && isRunning && !timerEnded) {
                 timerEnded = true;
                 clearInterval(timerInterval);
                 pausedElapsed = maxTime;
                 isRunning = false;
+                
+                document.getElementById('breathing-circle').classList.remove('active');
+                document.getElementById('timer-container').classList.remove('active-theme');
+                
                 const btn = document.getElementById('start-btn');
                 btn.textContent = '▶ 시작';
                 btn.className = 'btn btn-start'; 
-                displayObj.classList.remove('breathing');
                 alert('🔔 시험시간이 종료되었습니다.');
             }
         }
 
         function toggleTimer() {
             const btn = document.getElementById('start-btn');
-            const displayObj = document.getElementById('timer-display');
+            const circle = document.getElementById('breathing-circle');
+            const container = document.getElementById('timer-container');
 
             if (isRunning) {
+                // 일시정지
                 clearInterval(timerInterval);
                 pausedElapsed = getElapsedTime();
                 startTime = null;
                 isRunning = false;
+                
                 btn.textContent = '▶ 시작';
                 btn.className = 'btn btn-start';
-                displayObj.classList.remove('breathing');
+                
+                circle.classList.remove('active');
+                container.classList.remove('active-theme'); // 글자색 원상복구
+
             } else {
+                // 시작
                 if (getElapsedTime() < maxTime) {
                     startTime = Date.now();
                     isRunning = true;
                     timerEnded = false;
+                    
                     btn.textContent = '⏸ 일시정지';
                     btn.className = 'btn btn-pause';
-                    displayObj.classList.add('breathing');
+                    
+                    circle.classList.add('active');
+                    container.classList.add('active-theme'); // 글자색도 테마색으로 변경
+
                     if (timerInterval) clearInterval(timerInterval);
                     timerInterval = setInterval(updateDisplay, 500);
                     updateDisplay();
@@ -593,8 +581,11 @@
             pausedElapsed = 0;
             timerEnded = false;
             timestamps = [];
-            document.getElementById('timer-display').classList.remove('breathing');
-            updateDisplay(); 
+            
+            document.getElementById('breathing-circle').classList.remove('active');
+            document.getElementById('timer-container').classList.remove('active-theme');
+
+            updateDisplay();
             updateTimestampDisplay();
             const btn = document.getElementById('start-btn');
             btn.textContent = '▶ 시작';
