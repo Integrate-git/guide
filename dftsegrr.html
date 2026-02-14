@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>한완기 실전편 전략 수립 (Dark Mode & Flip)</title>
+    <style>
+        /* [다크모드 변수 설정] */
+        :root {
+            --bg-color: #eef2f7;
+            --box-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
+            --timestamp-bg: #f8fafc;
+            --timestamp-item: #ffffff;
+            --book-bg: #e2e8f0;
+            --theme-btn-bg: #ffffff;
+            --theme-btn-text: #0f172a;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --box-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --border-color: #334155;
+            --timestamp-bg: #0f172a;
+            --timestamp-item: #1e293b;
+            --book-bg: #334155;
+            --theme-btn-bg: #334155;
+            --theme-btn-text: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-color);
+            color: var(--text-main); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            padding: 20px;
+            touch-action: manipulation; 
+            -webkit-text-size-adjust: 100%;
+            transition: background-color 0.4s, color 0.4s;
+        }
+        
+        .container { 
+            max-width: 600px; 
+            width: 100%; 
+            text-align: center; 
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* [다크모드 토글 버튼] */
+        .theme-toggle {
+            position: absolute;
+            top: -10px;
+            right: 0;
+            background: var(--theme-btn-bg);
+            color: var(--theme-btn-text);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .theme-toggle:hover { transform: translateY(-2px); }
+
+        /* [로고] */
+        .main-logo {
+            width: 220px;
+            height: auto;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            transition: all 0.4s;
+            mix-blend-mode: multiply;
+        }
+        body.dark-mode .main-logo {
+            mix-blend-mode: normal;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        /* 📖 [3D 책장 넘기기 (Flip) 컨테이너] */
+        .scene {
+            width: 100%;
+            min-height: 720px; /* 컨텐츠 높이에 맞춰 여유있게 설정 */
+            perspective: 1200px;
+            margin-bottom: 30px;
+            display: block; /* 기본적으로 표시 */
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .card.is-flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .card__face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: var(--box-bg); 
+            border-radius: 20px; 
+            padding: 40px; 
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10); 
+            border: 1px solid var(--border-color); 
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.4s, border-color 0.4s;
+        }
+
+        .card__face--front { transform: rotateY(0deg); }
+        .card__face--back { transform: rotateY(180deg); }
+
+        /* [기존 White Box (이미지 스크린용)] */
+        .white-box {
+            background: var(--box-bg); 
+            border-radius: 20px; 
+            padding: 40px; 
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10); 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 30px; 
+            width: 100%;
+            transition: background-color 0.4s;
+        }
+
+        h1 { 
+            color: var(--text-main); 
+            margin-bottom: 30px; 
+            font-size: 28px; 
+            font-weight: bold; 
+        }
+
+        /* [버튼 공통 스타일] */
+        .btn { 
+            width: 100%; padding: 18px; font-size: 18px; font-weight: 600; 
+            border: none; border-radius: 12px; cursor: pointer; 
+            transition: all 0.2s ease; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; text-decoration: none; 
+            margin-bottom: 15px; touch-action: manipulation;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); filter: brightness(1.1); }
+        .btn:active { transform: translateY(0); filter: brightness(1.0); }
+
+        .btn-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .btn-mint { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+
+        /* [타이머 조작 버튼] */
+        .btn-start { background: #28a745; color: white; flex: 1; margin-bottom: 0; }
+        .btn-pause { background: #ffc107; color: #333; flex: 1; margin-bottom: 0; }
+        .btn-reset { background: #dc3545; color: white; flex: 1; margin-bottom: 0; }
+        .btn-record { background: #17a2b8; color: white; flex: 1; margin-bottom: 0; }
+        .btn-record:disabled { background: var(--border-color); color: var(--text-sub); cursor: not-allowed; transform: none; box-shadow: none; filter: none; }
+        .btn-back { background: var(--border-color); color: var(--text-main); margin-top: auto; }
+
+        /* 📚 [책 표지 버튼 영역] */
+        .book-section-title {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-sub);
+            font-weight: bold;
+        }
+        .book-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .book-link {
+            flex: 1;
+            aspect-ratio: 2 / 3; /* 세로로 긴 책 비율 유지 */
+            border-radius: 8px;
+            background-color: var(--book-bg);
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.4;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+        .book-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .book-link img {
+            position: absolute; width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* 화면 전환 (이미지 스크린용) */
+        .screen { display: none; }
+        .screen.active { display: block; width: 100%; }
+        
+        .image-container img { width: 100%; border-radius: 12px; margin-bottom: 15px; }
+
+        /* ⏱️ [타이머 스타일 및 애니메이션] */
+        .timer-display {
+            font-size: 64px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            transition: color 1s ease, text-shadow 1s ease;
+        }
+
+        /* 숨쉬는 효과 */
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.85; text-shadow: 0 0 10px rgba(0,0,0,0.1); }
+            50% { transform: scale(1.02); opacity: 1; text-shadow: 0 0 20px currentColor; }
+            100% { transform: scale(1); opacity: 0.85; text-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        }
+        .breathing { animation: breathe 2.5s infinite ease-in-out; }
+
+        /* 시간에 따른 색상 변화 */
+        .color-mint { color: #10b981; }
+        .color-yellow { color: #f59e0b; }
+        .color-red { color: #ef4444; }
+
+        .timer-label { color: var(--text-sub); font-size: 18px; margin-bottom: 5px; }
+        .timer-hint { color: var(--text-sub); font-size: 13px; margin-bottom: 10px; }
+        .timer-buttons { display: flex; gap: 10px; margin-bottom: 10px; }
+        .timer-buttons .btn { padding: 14px; font-size: 16px; }
+
+        .timestamp-section {
+            margin-top: 15px; padding: 15px; 
+            background: var(--timestamp-bg); 
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.4s;
+        }
+        .timestamp-title { font-size: 16px; color: var(--text-sub); margin-bottom: 10px; }
+        .timestamp-list { display: flex; flex-direction: column; gap: 8px; }
+        .timestamp-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; background: var(--timestamp-item); border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.4s;
+        }
+        .timestamp-item.empty { color: var(--text-sub); border-left-color: var(--border-color); justify-content: center; }
+        .timestamp-number { font-weight: 600; color: #17a2b8; }
+        .timestamp-time { font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; color: var(--text-main); }
+        .record-count { font-size: 14px; color: var(--text-sub); margin-top: 10px; }
+        .emoji { font-size: 24px; }
+
+        /* 푸터 */
+        .ig-footer { padding: 0 12px 20px; width: 100%; margin-top: 20px;}
+        .ig-footer__sns { display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .ig-sns { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; text-decoration: none; background: var(--box-bg); border: 1px solid var(--border-color); transition: transform .12s ease, box-shadow .12s ease; color: var(--text-sub); }
+        .ig-sns:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, .1); }
+        .ig-sns svg { width: 20px; height: 20px; fill: currentColor; stroke: currentColor; }
+        .ig-sns--instagram:hover { color: #E1306C; border-color: currentColor; }
+        .ig-sns--naver:hover { color: #03C75A; border-color: #03C75A; }
+        .ig-footer__info { margin: 12px 0 10px; display: grid; gap: 6px; color: var(--text-sub); font-size: 12.5px; line-height: 1.35; text-align: center; }
+        .ig-footer__info p { margin: 0; }
+        .ig-footer__info a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+        .ig-footer__copyright { margin: 0; font-size: 12.5px; color: var(--text-sub); text-align: center; }
+
+        @media (max-width: 480px) {
+            .scene { min-height: 750px; }
+            .card__face { padding: 25px; }
+            .white-box { padding: 25px; }
+            h1 { font-size: 22px; }
+            .timer-display { font-size: 48px; }
+            .timer-buttons { flex-wrap: wrap; }
+            .timer-buttons .btn { flex: 1 1 45%; }
+            .book-link { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 다크 모드</button>
+
+        <img src="https://cdn.imweb.me/thumbnail/20251022/5f0f79023d456.png" alt="INTEGRATE" class="main-logo">
+
+        <div class="scene" id="scene-container">
+            <div class="card" id="main-card">
+                
+                <div class="card__face card__face--front">
+                    <h1>한완기 실전편</h1>
+                    <a href="https://integrate.kr/column/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170013700&t=board" target="_blank" class="btn btn-purple">
+                        타임라인 가이드
+                    </a>
+                    <button class="btn btn-pink" onclick="showScreen('image')">
+                        단계별 전략 수립
+                    </button>
+                    <button class="btn btn-mint" onclick="showScreen('timer')">
+                        <span class="emoji">⏱️</span>
+                        100분 타이머
+                    </button>
+
+                    <p class="book-section-title">추천 교재 (클릭 시 이동)</p>
+                    <div class="book-container">
+                        <a href="https://integrate.kr/" target="_blank" class="book-link">
+                            <span>한완수<br>시리즈</span>
+                        </a>
+                        <a href="https://integrate.kr/" target="_blank" class="book-link">
+                            <span>한완기<br>기출편</span>
+                        </a>
+                        <a href="https://integrate.kr/" target="_blank" class="book-link">
+                            <span>한완기<br>실전편</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card__face card__face--back">
+                    <h1>⏱️ 100분 타이머</h1>
+                    <p class="timer-hint">💡 시험 시작 전에 먼저 [시작], [기록] 버튼을 눌러서 테스트해보세요</p>
+                    <p class="timer-label">경과 시간</p>
+                    
+                    <div class="timer-display color-mint" id="timer-display">00:00</div>
+                    
+                    <div class="timer-buttons">
+                        <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">▶ 시작</button>
+                        <button class="btn btn-record" id="record-btn" onclick="recordTimestamp()">📌 기록</button>
+                        <button class="btn btn-reset" onclick="resetTimer()">↺ 리셋</button>
+                    </div>
+
+                    <div class="timestamp-section">
+                        <p class="timestamp-title">📋 기록된 타임스탬프</p>
+                        <div class="timestamp-list" id="timestamp-list">
+                            <div class="timestamp-item empty">기록 없음</div>
+                        </div>
+                        <p class="record-count" id="record-count">남은 기록 횟수: 4회</p>
+                    </div>
+                    
+                    <button class="btn btn-back" onclick="goBackToMain()">← 뒤로 가기</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="image-screen" class="screen">
+            <div class="white-box">
+                <h1>단계별 전략 수립</h1>
+                <div class="image-container">
+                    <img src="단계별_전략.png" alt="단계별 전략">
+                    <button class="btn btn-back" onclick="goBackToMain()">
+                        ← 뒤로 가기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="ig-footer">
+            <div class="ig-footer__sns">
+                <a href="https://www.instagram.com/lhw_math/" target="_blank" class="ig-sns ig-sns--instagram" id="sns-insta">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17" cy="7" r="1.4" fill="currentColor"></circle></svg>
+                </a>
+                <a href="https://cafe.naver.com/pnmath" target="_blank" class="ig-sns ig-sns--naver" id="sns-naver">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M7.5 17.5V6.5h3.1l3.9 6.6V6.5h3v11h-3.1l-3.9-6.6v6.6h-3z" fill="currentColor"></path></svg>
+                </a>
+            </div>
+            <div class="ig-footer__info">
+                <p>주소 : 서울특별시 강남구 선릉로 608 (삼성동, 선진빌딩 6층)</p>
+                <p>㈜ 인터그레이트 | 대표이사: 이해원</p>
+                <p>사업자등록번호: 401-87-02099</p>
+                <p>이메일: <a href="mailto:info@integrate.kr">info@integrate.kr</a></p>
+            </div>
+            <p class="ig-footer__copyright">Copyright © 2025 ㈜ 인터그레이트 All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. 다크모드 토글 기능
+        // ==========================================
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeBtn');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.textContent = '☀️ 라이트 모드';
+            } else {
+                themeBtn.textContent = '🌙 다크 모드';
+            }
+        }
+
+        // ==========================================
+        // 화면별 줌 제어
+        // ==========================================
+        function setZoomEnabled(enabled) {
+            const viewport = document.getElementById('viewport-meta');
+            if (enabled) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            } else {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+        }
+
+        // ==========================================
+        // 기존 타이머 기능 및 새 로직 병합
+        // ==========================================
+        const maxTime = 100 * 60; // 100분 (6000초)
+        let timerInterval = null;
+        let isRunning = false;
+        let startTime = null;
+        let pausedElapsed = 0;
+        let timerEnded = false;
+
+        const maxRecords = 4;
+        let timestamps = [];
+        const recordLabels = ['1회독 단계', '2회독 단계', '검토/마무리', '풀이 종료'];
+        let currentScreen = 'main';
+
+        // 화면 전환 로직 (Flip 애니메이션 적용)
+        function showScreen(screen) {
+            currentScreen = screen;
+            setZoomEnabled(screen === 'image');
+
+            const sceneContainer = document.getElementById('scene-container');
+            const mainCard = document.getElementById('main-card');
+            const imageScreen = document.getElementById('image-screen');
+
+            if (screen === 'image') {
+                // 이미지 화면: 카드 영역 숨기고 이미지 박스 표시
+                sceneContainer.style.display = 'none';
+                imageScreen.classList.add('active');
+            } else if (screen === 'timer') {
+                // 타이머 화면: 카드 뒤집기
+                imageScreen.classList.remove('active');
+                sceneContainer.style.display = 'block';
+                mainCard.classList.add('is-flipped');
+            } else {
+                // 메인 화면: 카드 원상복구
+                imageScreen.classList.remove('active');
+                sceneContainer.style.display = 'block';
+                mainCard.classList.remove('is-flipped');
+            }
+
+            if (screen !== 'main') {
+                history.pushState({ screen: screen }, '', '');
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+        }
+
+        function getElapsedTime() {
+            if (!isRunning || !startTime) return pausedElapsed;
+            const now = Date.now();
+            const elapsed = pausedElapsed + Math.floor((now - startTime) / 1000);
+            return Math.min(elapsed, maxTime);
+        }
+
+        // 🌈 시간에 따른 색상 변화 로직
+        function updateTimerColor(elapsedSeconds) {
+            const display = document.getElementById('timer-display');
+            display.classList.remove('color-mint', 'color-yellow', 'color-red');
+
+            if (elapsedSeconds > 5700) { 
+                // 95분 초과 ~ 100분: 붉은색
+                display.classList.add('color-red');
+            } else if (elapsedSeconds > 3000) { 
+                // 50분 초과 ~ 95분: 노란색
+                display.classList.add('color-yellow');
+            } else {
+                // 0분 ~ 50분: 민트색
+                display.classList.add('color-mint');
+            }
+        }
+
+        function updateDisplay() {
+            const elapsed = getElapsedTime();
+            const displayObj = document.getElementById('timer-display');
+            displayObj.textContent = formatTime(elapsed);
+            
+            // 색상 업데이트 호출
+            updateTimerColor(elapsed);
+
+            if (elapsed >= maxTime && isRunning && !timerEnded) {
+                timerEnded = true;
+                clearInterval(timerInterval);
+                pausedElapsed = maxTime;
+                isRunning = false;
+                const btn = document.getElementById('start-btn');
+                btn.textContent = '▶ 시작';
+                btn.className = 'btn btn-start'; 
+                displayObj.classList.remove('breathing'); // 종료 시 숨쉬기 제거
+                alert('🔔 시험시간이 종료되었습니다.');
+            }
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('start-btn');
+            const displayObj = document.getElementById('timer-display');
+
+            if (isRunning) {
+                // 일시정지 처리
+                clearInterval(timerInterval);
+                pausedElapsed = getElapsedTime();
+                startTime = null;
+                isRunning = false;
+                btn.textContent = '▶ 시작';
+                btn.className = 'btn btn-start';
+                displayObj.classList.remove('breathing'); // 숨쉬기 멈춤
+            } else {
+                // 시작 처리
+                if (getElapsedTime() < maxTime) {
+                    startTime = Date.now();
+                    isRunning = true;
+                    timerEnded = false;
+                    btn.textContent = '⏸ 일시정지';
+                    btn.className = 'btn btn-pause';
+                    displayObj.classList.add('breathing'); // 숨쉬기 시작
+                    if (timerInterval) clearInterval(timerInterval);
+                    timerInterval = setInterval(updateDisplay, 500);
+                    updateDisplay();
+                }
+            }
+        }
+
+        function recordTimestamp() {
+            if (timestamps.length >= maxRecords) {
+                alert('모든 단계가 기록되었습니다.');
+                return;
+            }
+            const elapsed = getElapsedTime();
+            if (!isRunning && elapsed === 0) {
+                alert('타이머를 먼저 시작해주세요.');
+                return;
+            }
+            timestamps.push(elapsed);
+            updateTimestampDisplay();
+        }
+
+        function updateTimestampDisplay() {
+            const listElement = document.getElementById('timestamp-list');
+            const countElement = document.getElementById('record-count');
+            const recordBtn = document.getElementById('record-btn');
+            
+            if (timestamps.length === 0) {
+                listElement.innerHTML = '<div class="timestamp-item empty">기록 없음</div>';
+            } else {
+                listElement.innerHTML = timestamps.map((time, index) => `
+                    <div class="timestamp-item">
+                        <span class="timestamp-number">${recordLabels[index]}</span>
+                        <span class="timestamp-time">${formatTime(time)}</span>
+                    </div>
+                `).join('');
+            }
+            const remaining = maxRecords - timestamps.length;
+            countElement.textContent = `남은 기록 횟수: ${remaining}회`;
+            if (remaining === 0) recordBtn.disabled = true;
+            else recordBtn.disabled = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isRunning = false;
+            startTime = null;
+            pausedElapsed = 0;
+            timerEnded = false;
+            timestamps = [];
+            document.getElementById('timer-display').classList.remove('breathing'); // 숨쉬기 제거
+            updateDisplay(); // 리셋 후 색상도 0초 기준(민트)으로 자동 복구됨
+            updateTimestampDisplay();
+            const btn = document.getElementById('start-btn');
+            btn.textContent = '▶ 시작';
+            btn.className = 'btn btn-start';
+            document.getElementById('record-btn').disabled = false;
+        }
+
+        function goBackToMain() {
+            if (currentScreen === 'timer') {
+                resetTimer(); // 뒤로가기 시 타이머 리셋 (원하지 않으면 주석 처리하세요)
+            }
+            showScreen('main');
+        }
+
+        function handlePageResume() { if (isRunning) updateDisplay(); }
+        document.addEventListener('visibilitychange', function() { if (!document.hidden) handlePageResume(); });
+        window.addEventListener('focus', handlePageResume);
+        window.addEventListener('pageshow', handlePageResume);
+        window.addEventListener('popstate', function(e) { goBackToMain(); });
+        history.replaceState({ screen: 'main' }, '', '');
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                const instaBtn = document.getElementById('sns-insta');
+                if(instaBtn) {
+                    instaBtn.removeAttribute("target");
+                    instaBtn.href = "instagram://user?username=lhw_math";
+                }
+                const naverBtn = document.getElementById('sns-naver');
+                if(naverBtn) {
+                    naverBtn.removeAttribute("target");
+                    naverBtn.href = "navercafe://cafe?cafeId=23380319";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
